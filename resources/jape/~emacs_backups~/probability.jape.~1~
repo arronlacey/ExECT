@@ -1,0 +1,21 @@
+Phase: Probability
+Input:Lookup
+Options: control=appelt
+
+/*
+ * FInd any umls lookup precedede by a probability term and flag it with a
+ * feature for its probability
+ *
+ */
+
+
+Rule: prob1
+(
+	{Lookup.minorType == probability}
+	({Lookup.majorType == umls}):umls
+):match
+-->
+{ 
+  umlsAnnots.first().getFeatures().put("probability","true")
+}
+

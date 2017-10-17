@@ -1,0 +1,41 @@
+Phase: PrescriptionCoref
+Input:Prescription
+Options: control=appelt
+
+Rule: CoRef
+(
+	{Prescription.status == "stop"}
+):match
+-->
+{
+	Annotation prescription = bindings.get("match").iterator().next();
+	String drug = (String)prescription.getFeatures().get("drug");
+	
+	List<Annotation> previous = new ArrayList<Annotation>(inputAS.get("Prescription",0L, prescription.getStartNode().getOffset()));
+	Collections.sort(previous, new OffsetComparator());
+	Collections.reverse(previous);
+	
+	for (Annotation a : previous) {
+		if (drug.equalsIgnoreCase((String)a.getFeatures().get("drug"))) {
+			if (!"stop".equals(a.getFeatures().get("status"))) {
+				//this is the closest previous mention of the drug which isn't a stop in itself
+				
+				String dose = (String)a.getFeatures().get("dose");
+				
+				if (dose != null && !dose.equals("unknown")) {
+					if (prescription.getFeatures().containsKey("dose"))
+						prescription.getFeatures().put("stopDose", prescription.getFeatures().get("dose"));					
+					
+					prescription.getFeatures().put("dose",dose);
+				}
+				
+				//TODO probably need to move the frequency info between annotations as well
+
+				//TODO also need to copy dose-value and dose-unit
+				
+				break;
+			}		
+		}
+		
+	}
+}

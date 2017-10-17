@@ -1,0 +1,12 @@
+Phase: Numbers
+Input: Number Token Split Lookup Time
+Options: control=appelt
+
+Rule: Numerals
+(
+	{Token.kind == number}
+):match
+-->
+:match.Numeric = { rule = Numerals, value = :match@string}
+
+

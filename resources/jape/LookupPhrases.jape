@@ -1,0 +1,9 @@
+MultiPhase:	LookupPhrases
+
+Phases:
+splitNounChunks
+PhraseLookup
+PhrasePruning
+Lookaround
+Lookaround2
+Phrase3

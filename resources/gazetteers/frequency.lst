@@ -1,0 +1,45 @@
+a.c.
+ad lib
+p.c.
+p.o.
+q.d.
+ut dict.
+q.h.:frequency=1:time-unit=hour:interval=1
+q.2h.:frequency=1:time-unit=hour:interval=2
+q.3h.:frequency=1:time-unit=hour:interval=3
+q.4h.:frequency=1:time-unit=hour:interval=4
+mane:frequency=1:time-unit=day:interval=1:when=morning
+am:frequency=1:time-unit=day:interval=1:when=morning
+in the morning:frequency=1:time-unit=day:interval=1:when=morning
+nocte:frequency=1:time-unit=day:interval=1:when=night
+at night:frequency=1:time-unit=day:interval=1:when=night
+od:frequency=1:time-unit=day:interval=1:when=morning
+every day:frequency=1:time-unit=day:interval=1
+daily:frequency=1:time-unit=day:interval=1
+b.i.d.:frequency=2:time-unit=day:interval=1
+bd:frequency=2:time-unit=day:interval=1
+t.i.d.:frequency=3:time-unit=day:interval=1
+tds:frequency=3:time-unit=day:interval=1
+qid:frequency=4:time-unit=day:interval=1
+q.i.d.:frequency=4:time-unit=day:interval=1
+qds:frequency=4:time-unit=day:interval=1
+prn:time-unit=as required
+p.r.n.:time-unit=as required
+in the evening:frequency=1:time-unit=day:interval=1:when=night
+b.d.:frequency=2:time-unit=day:interval=1
+per week:frequency=1:time-unit=week
+per year:frequency=1:time-unit=year
+in a week:frequency=1:time-unit=week:interval=7
+in a day:frequency=1:time-unit=day:interval=1
+years:frequency=1:time-unit=year
+months:frequency=1:time-unit=month
+weeks:frequency=1:time-unit=week
+year:frequency=1:time-unit=year
+a year:frequency=1:time-unit=year:interval=1
+in the night:frequency=1:time-unit=day:interval=1:when=night
+b.d:frequency=2:time-unit=day:interval=1
+pm:frequency=1:time-unit=day:interval=1:when=night
+morning:frequency=1:time-unit=day:interval=1:when=morning
+afternoon:frequency=1:time-unit=day:interval=1:when=day
+evening:frequency=1:time-unit=day:interval=1:when=night
+night:frequency=1:time-unit=day:interval=1:when=night

@@ -1,0 +1,18 @@
+Phase: PhrasePruning
+Input: Phrase1 Phrase2 Lookup Person Sentence
+Options: control=appelt
+
+Rule: finalPhrase
+(
+    {Phrase1 contains Lookup, !Phrase1 contains Person}
+):match
+-->
+:match.FinalPhrase = {rule = finalPhrase1}
+
+
+Rule: finalPhrase
+(
+    {Phrase2 contains Lookup, !Phrase2 contains Person}
+):match
+-->
+:match.FinalPhrase = {rule = finalPhrase2}

@@ -1,0 +1,21 @@
+Phase: PhraseLookups
+Input: Phrase1 Sentence
+Options: control=brill
+
+Rule: phraseLookups
+(
+    ({Phrase1}):n1
+    ({Phrase1}):n2
+):match
+-->
+{
+  Node start = ((AnnotationSet) bindings.get("n1"))
+               .firstNode();
+  Node end   = ((AnnotationSet) bindings.get("n2"))
+               .lastNode();
+
+  FeatureMap features = Factory.newFeatureMap();
+  features.put("rule", "phraseLookup2");
+
+  outputAS.add(start, end, "Phrase2", features);
+}

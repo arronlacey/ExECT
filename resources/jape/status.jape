@@ -1,0 +1,33 @@
+Phase: Status
+Input:Prescription Token
+Options: control=appelt
+
+Rule: XtoY
+(
+	({Prescription}):stop
+	{Token.string == "to"}
+	({Prescription}):start
+):match
+-->
+{
+	Annotation start = bindings.get("start").iterator().next();
+	start.getFeatures().put("status", "start");
+
+	Annotation stop = bindings.get("stop").iterator().next();
+	start.getFeatures().put("status", "stop");
+}
+
+Rule: XfromY
+(
+	({Prescription}):start
+	{Token.string == "from"}
+	({Prescription}):stop
+):match
+-->
+{
+	Annotation start = bindings.get("start").iterator().next();
+	start.getFeatures().put("status", "start");
+
+	Annotation stop = bindings.get("stop").iterator().next();
+	start.getFeatures().put("status", "stop");
+}

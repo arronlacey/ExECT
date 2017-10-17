@@ -1,0 +1,18 @@
+Phase: DoseChange
+Input: Number Token Lookup Measurement
+Options: control=appelt
+
+/*
+ * Find dose increase/decrease when applied to a drug 
+ * i.e. increase the does of Lamotrigine by 25mg
+ */
+ 
+ 
+Rule: dose_increase
+(
+    ({Lookup.minorType == increase}):dose_change
+	({Lookup.majorType == drug}):drug
+	{Measurement}
+):match
+-->
+:match.Dose-change = { rule = dose_increase, type = :drug.Lookup.minorType, change = :dose_change.Lookup.minorType }

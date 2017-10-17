@@ -1,0 +1,91 @@
+Phase: DrugStatus
+Input: Measurement DoseFrequency Lookup Medmod
+Options: control=appelt
+
+Rule: doseMatch0
+(   
+    ({Lookup.STY=="Pharmacologic Substance"})
+    {Measurement}
+    {DoseFrequency}
+):match
+-->
+:match.Prescription = { rule = doseMatch0,  drug = :match.Lookup.PREF,  CUI = :match.Lookup.inst, dose-val = :match.Measurement.quantity, dose-unit =:match.Measurement.units, dose-frequency = :match.DoseFrequency.frequency, dose-interval = :match.DoseFrequency.interval}
+
+
+
+
+Rule: doseMatch1
+(
+    ({Lookup.STY=="Clinical Drug"})
+    ({Measurement})*
+	{DoseFrequency}
+):match
+-->
+:match.Prescription = { rule = doseMatch1,  drug = :match.Lookup.PREF,  CUI = :match.Lookup.inst, dose-val = :match.Measurement.quantity, dose-unit =:match.Measurement.units, dose-frequency = :match.DoseFrequency.frequency, dose-interval = :match.DoseFrequency.interval}
+
+
+Rule:doseMatch2
+(
+	{Measurement.dimension!=time}
+	{Lookup.STY=="Pharmacologic Substance"}
+	({DoseFrequency})?
+):match
+-->
+:match.Prescription = { rule = doseMatch2, drug = :match.Lookup.name, CUI = :match.Lookup.inst, dose = :match.Measurement@string, dose-value = :match.Measurement.value, dose-unit = :match.Measurement.unit, route = :match.Drug.route, frequency = :match.DoseFrequency.frequency, time-unit = :match.DoseFrequency.time-unit, interval = :match.DoseFrequency.interval, when = :match.DoseFrequency.when, drug-type = :match.Drug.type }
+
+
+
+
+
+Rule:MedStop
+(   
+    ({Medmod.minorType == stop})*
+    ({Lookup.STY=="Pharmacologic Substance"})
+    ({Medmod.minorType == stop})*
+    {Measurement}
+    {DoseFrequency}
+):match
+-->
+:match.PrescriptionChange = { rule = medStop0,  drug = :match.Lookup.PREF,  CUI = :match.Lookup.inst, dose-val = :match.Measurement.quantity, dose-unit =:match.Measurement.units, dose-frequency = :match.DoseFrequency.frequency, dose-interval = :match.DoseFrequency.interval}
+
+
+
+Rule: medStop1
+(
+    ({Medmod.minorType == stop})*
+    ({Lookup.STY=="Clinical Drug"})
+    ({Medmod.minorType == stop})*
+    ({Measurement})*
+	{DoseFrequency}
+):match
+-->
+:match.Prescription = { rule = medStop1,  drug = :match.Lookup.PREF,  CUI = :match.Lookup.inst, dose-val = :match.Measurement.quantity, dose-unit =:match.Measurement.units, dose-frequency = :match.DoseFrequency.frequency, dose-interval = :match.DoseFrequency.interval}
+
+
+
+Rule:MedModification
+(   
+    ({Medmod})*
+    ({Lookup.STY=="Pharmacologic Substance"})
+    ({Medmod})*
+    {Measurement}
+    {DoseFrequency}
+    ({Medmod})*
+):match
+-->
+:match.PrescriptionChange = { rule = medModification0,  drug = :match.Lookup.PREF,  CUI = :match.Lookup.inst, dose-val = :match.Measurement.quantity, dose-unit =:match.Measurement.units, dose-frequency = :match.DoseFrequency.frequency, dose-interval = :match.DoseFrequency.interval}
+
+
+
+
+Rule: medStop1
+(
+    ({Medmod})*
+    ({Lookup.STY=="Clinical Drug"})
+    ({Medmod})*
+    ({Medmod.minorType == stop})*
+    ({Measurement})*
+	{DoseFrequency}
+):match
+-->
+:match.Prescription = { rule = medStop1,  drug = :match.Lookup.PREF,  CUI = :match.Lookup.inst, dose-val = :match.Measurement.quantity, dose-unit =:match.Measurement.units, dose-frequency = :match.DoseFrequency.frequency, dose-interval = :match.DoseFrequency.interval}

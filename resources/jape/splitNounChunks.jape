@@ -1,0 +1,13 @@
+Phase: splitNounChunks
+Input: Sentence NounChunk
+Options: control = appelt
+
+Rule: simpleSplit
+/* split compound word, to make it the same as the
+TreeTagger output, e.g. apprend-on should be two Tokens not one */
+
+(
+  {NounChunk within {Sentence.case == "sentence"}}
+):match
+-->
+:match.Phrase1 = {rule = nounFilter}

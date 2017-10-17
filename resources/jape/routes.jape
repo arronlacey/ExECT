@@ -1,0 +1,23 @@
+Phase: Routes
+Input:Prescription
+Options: control=appelt
+
+Rule: OralTablet
+(
+	{Prescription.dose =~ "tablet"}
+):match
+-->
+{
+	Annotation prescription = bindings.get("match").iterator().next();
+	if (!prescription.getFeatures().containsKey("route")) prescription.getFeatures().put("route", "oral");
+}
+
+Rule: OralLiquid
+(
+	{Prescription@string =~ "liquid"}
+):match
+-->
+{
+	Annotation prescription = bindings.get("match").iterator().next();
+	if (!prescription.getFeatures().containsKey("route")) prescription.getFeatures().put("route", "oral");
+}

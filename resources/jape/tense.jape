@@ -1,0 +1,61 @@
+Phase: Tense
+Input:Drug Measurement Keyword DoseFrequency Token Split Date
+Options: control=appelt
+
+Rule: HistoricPrescriptions
+(
+	{Keyword.kind == "historic"}
+	(
+		(({Measurement}({DoseFrequency})?)|{Keyword.kind == "prescription_change"})*
+		({Token.string == "of"})?
+		{Drug}
+		({Measurement})*
+		({DoseFrequency})?
+	)+
+):match
+-->
+{
+	AnnotationSet match = bindings.get("match");
+
+	AnnotationSet sentences = inputAS.get("Sentence", match.firstNode().getOffset(), match.lastNode().getOffset());
+
+	AnnotationSet prescriptions = inputAS.get("Prescription", sentences.firstNode().getOffset(), sentences.lastNode().getOffset());
+
+	for (Annotation a : prescriptions) {
+		a.getFeatures().put("tense", "past");
+	}
+}
+
+Rule: SUMMARY
+(
+	{Token.string == "SUMMARY"}
+):match
+-->
+{
+	AnnotationSet match = bindings.get("match");
+
+	AnnotationSet prescriptions = inputAS.get("Prescription", match.lastNode().getOffset(), inputAS.lastNode().getOffset());
+
+	for (Annotation a : prescriptions) {
+		a.getFeatures().put("tense", "past");
+	}
+}
+
+Rule: Dated
+(
+	({Date.relative == "past"})|({Token.kind == "number", Token.length == 4})
+):match
+-->
+{
+	AnnotationSet match = bindings.get("match");
+
+	AnnotationSet sentences = inputAS.get("Sentence", match.firstNode().getOffset(), match.lastNode().getOffset());
+
+	if (sentences.size() == 0) return;
+
+	AnnotationSet prescriptions = inputAS.get("Prescription", sentences.firstNode().getOffset(), sentences.lastNode().getOffset());
+
+	for (Annotation a : prescriptions) {
+		a.getFeatures().put("tense", "past");
+	}
+}

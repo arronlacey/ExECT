@@ -1,0 +1,14 @@
+Phase: EpilepsyMentions
+Input: Investigations Mentions Lookup
+Options: control=appelt
+
+
+Rule: getMentions
+(
+    {Mentions, Lookup}
+):match
+-->
+:match.Mentions = { rule = getMentions, PREF = :match.Lookup.PREF  ,CUI = :match.Lookup.inst, STY = :match.Lookup.STY, Negation = :match.Lookup.Negation,
+Experiencer = :match.Lookup.Experiencer, Temporality = :match.Lookup.Temporality}
+
+

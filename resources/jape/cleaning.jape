@@ -1,0 +1,90 @@
+Imports: {import static gate.Utils.*; }
+
+Phase: Cleaning
+Input:Lookup Lookup2 Address Location Token Person NounChunk
+Options: control=appelt
+
+
+
+
+
+
+
+
+
+
+/*
+ * Deal with diseases that are part of URLs
+ * e.g. www.diabetes-uk.org
+ *
+ */
+
+Rule: url1
+
+(
+  {Lookup.majorType == umls, Lookup within {Address.kind == url}}
+):umls
+
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+
+
+
+
+/*
+ * Remove Lookups that are preceded of proceded by a generic healthcare terms i.e. Clinic
+ */
+ 
+Rule: cleanHealthCareTerms
+
+(
+  ({Lookup.STY == "Sign or Symptom"} | {Lookup.STY == "Disease or Syndrome"} | {Lookup.STY == "Disease"})
+  ({Lookup2.majorType == organization} | {Location})
+):umls
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+
+Rule: cleanHealthCareTerms
+
+(
+   ({Lookup2.majorType == organization} | {Location})
+   ({Lookup.STY == "Sign or Symptom"} | {Lookup.STY == "Disease or Syndrome"} | {Lookup.STY == "Disease"})
+  
+):umls
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+
+Rule: cleanDiagnosis
+
+(
+    ({Lookup.STY == "Sign or Symptom"} | {Lookup.STY == "Disease or Syndrome"} | {Lookup.STY == "Disease"}):umls
+	({Lookup.STY == "Health Care Activity"} | {Lookup.STY =="Health Care Related Organization"})
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+
+
+
+/* Temporal Concepts need to be removed 
+* - they are fequent, useless, and troublesome when relying on JAPE rules that use Lookup as input
+*/
+
+
+Rule: removeUselessLookups
+
+(
+    ({Lookup.STY == "Temporal Concept"}):umls
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+

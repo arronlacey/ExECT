@@ -1,0 +1,23 @@
+Phase: Diagnosis
+Input:  Lookup Sentence Split Stopwords
+Options: control=all
+
+
+Rule: getDiagnosis
+    ({Lookup.PREF == "Diagnosed"} 
+    ({Lookup.Negation == "Affirmed", Lookup.STY == "Disease or Syndrome"} | 
+	{Lookup.Negation == "Affirmed", Lookup.STY == "Sign or Symptom"} |
+	{Lookup.Negation == "Affirmed", Lookup.STY == "Finding", Lookup.PREF !~ "Medication"} | 
+	{Lookup.Negation == "Affirmed", Lookup.STY == "Mental or Behavioral Dysfunction"} |
+	({Lookup.Negation == "Affirmed", Lookup.STY == "Diagnostic Procedure"})?)*
+	(
+	{Lookup.Negation == "Affirmed", Lookup.STY == "Disease or Syndrome"} | 
+	{Lookup.Negation == "Affirmed", Lookup.STY == "Sign or Symptom"} |
+	{Lookup.Negation == "Affirmed", Lookup.STY == "Finding", Lookup.PREF !~ "Medication"} | 
+	{Lookup.Negation == "Affirmed", Lookup.STY == "Mental or Behavioral Dysfunction"} |
+	({Lookup.Negation == "Affirmed", Lookup.STY == "Diagnostic Procedure"})?
+	):item
+	):label
+-->
+:item.Diagnosis = { rule = "getDiagnosis", PREF = :item.Lookup.PREF  ,CUI = :item.Lookup.inst, STY = :item.Lookup.STY, Negation = :item.Lookup.Negation,
+Experiencer = :item.Lookup.Experiencer, Temporality = :item.Lookup.Temporality}

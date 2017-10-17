@@ -1,0 +1,239 @@
+/*
+*  time.jape
+*
+* Copyright (c) 1998-2004, The University of Sheffield.
+*
+*  This file is part of GATE (see http://gate.ac.uk/), and is free
+*  software, licenced under the GNU Library General Public License,
+*  Version 2, June 1991 (in the distribution as file licence.html,
+*  and also available at http://gate.ac.uk/gate/licence.html).
+*
+*  Diana Maynard, 10 Sep 2001
+* 
+*  $Id: date.jape 12268 2010-02-16 13:26:12Z markagreenwood $
+*/
+
+
+Phase:	Time
+Input: Token Lookup
+Options: control = appelt
+
+
+/////////////////////////////////////////////////
+
+Macro: ONE_DIGIT
+({Token.kind == number, Token.length == "1"})
+
+Macro: TWO_DIGIT
+({Token.kind == number, Token.length == "2"})
+
+Macro: FOUR_DIGIT
+({Token.kind == number, Token.length == "4"})
+
+Macro:  TIME_ZONE
+(({Lookup.minorType == zone})|
+ ({Token.string == "("}
+  {Lookup.minorType == zone}
+  {Token.string == ")"})
+)
+
+Macro: TIME_DIFF
+(
+ ({Token.string == "+"}|{Token.string == "-"})
+ (FOUR_DIGIT)
+)
+
+Macro: TIME_AMPM
+(
+ {Lookup.minorType == ampm}
+)
+
+///////////////////////////////////////////////////////////////
+// Time Rules 
+
+Rule: TimeDigital1
+// 20:14:25
+(
+ (ONE_DIGIT|TWO_DIGIT){Token.string == ":"} TWO_DIGIT 
+({Token.string == ":"} TWO_DIGIT)?
+(TIME_AMPM)?	
+(TIME_DIFF)?
+(TIME_ZONE)? 
+)
+:time
+-->
+:time.Time = {kind = "positive", rule = "TimeDigital1"}
+
+
+Rule:	TimeDigital2
+
+// 8:14 am
+// 4.34 pm
+// 6am
+
+(
+ (ONE_DIGIT|TWO_DIGIT) 
+ (({Token.string == ":"}|{Token.string == "."} |{Token.string == "-"} )
+  TWO_DIGIT)?
+ (TIME_AMPM)
+ (TIME_ZONE)?
+)
+:time
+-->
+:time.Time = {kind = "positive", rule = "TimeDigital"}
+
+
+Rule: TimeOClock
+// ten o'clock
+
+(
+ {Lookup.minorType == hour}
+ {Token.string == "o"}
+ {Token.string == "'"}
+ {Token.string == "clock"}
+)
+:time 
+-->
+ :time.Time = {kind = "positive", rule = "TimeOClock"}
+
+ 
+Rule: TimeAnalogue
+// half past ten
+// ten to twelve
+// twenty six minutes to twelve
+
+(
+ (((({Lookup.majorType == number})?
+    {Lookup.majorType == number}
+   )
+   {Token.string == "minutes"}
+  ) |
+  ({Token.string == "half"} | 
+   {Token.string == "quarter"}) 
+ )
+ ({Token.string == "past"}|
+  {Token.string == "to"})
+ {Lookup.minorType == hour}
+)
+:time 
+-->
+ :time.Time = {kind = "positive", rule = "TimeAnalogue"}
+
+
+Rule: TimeWordsContext
+Priority: 50
+// seven thirty tomorrow
+
+(
+ {Lookup.majorType == number}
+ (
+  {Lookup.majorType == number}
+ )?
+):time1
+(
+ {Lookup.minorType == time_key}
+) 
+-->
+:time1.Time = {kind = "positive", rule = "TimeWordsContext"}
+
+
+Rule: TimeWords
+
+(
+ {Lookup.majorType == number}
+ (
+  {Lookup.majorType == number}
+ )?
+)
+:time
+-->
+  :time.Time = {kind = "timeWords", rule = "TimeWords"}
+
+  
+
+
+Rule: TimeDigitalContext1
+
+(
+(FOUR_DIGIT)
+):time
+{Lookup.minorType == time_key}
+ -->
+ :time.Time = {kind = "positive", rule = "TimeDigitalContext"}
+
+Rule: NotTimeDigitalContext2
+Priority: 100
+// prevent things like "at 0.61 km/h"
+
+(
+ {Token.string == "at"}
+)
+({Token.string == "0"}
+  ({Token.string == ":"}|{Token.string == "-"}|{Token.string == "."}) TWO_DIGIT
+ (TIME_AMPM)?
+ (TIME_ZONE)?
+)
+:time
+ -->
+ :time.Temp = {rule = "NotTimeDigitalContext2"}
+
+
+Rule: TimeDigitalContext2
+
+(
+ {Token.string == "at"}
+)
+(
+ FOUR_DIGIT | 
+ ((ONE_DIGIT|TWO_DIGIT)
+  ({Token.string == ":"}|{Token.string == "-"}|{Token.string == "."}) TWO_DIGIT
+ )
+ (TIME_AMPM)?
+ (TIME_ZONE)?
+)
+:time
+ -->
+ :time.Time = {kind = "positive", rule = "TimeDigitalContext2"}
+
+Rule: TimeDigitalContext1
+(
+ {Token.string == "in"}
+)?
+((ONE_DIGIT|TWO_DIGIT)
+ ({Token.string == ":"}|{Token.string == "."})
+ TWO_DIGIT
+ ({Token.string == "seconds"}|
+  {Token.string == "minutes"}|
+  {Token.string == "hours"}
+ )
+):time
+-->
+:time.Time = {kind = "positive", rule = "TimeDigitalContext1"}
+
+
+
+Rule: TimeDigitalContextConj
+
+(
+ {Token.string == "at"}
+)
+(
+ FOUR_DIGIT | 
+ ((ONE_DIGIT|TWO_DIGIT)
+  ({Token.string == ":"}|{Token.string == "-"}|{Token.string == "."}) TWO_DIGIT
+ )
+)
+:time1
+(
+ {Token.string == "and"}
+)
+(
+ FOUR_DIGIT | 
+ ((ONE_DIGIT|TWO_DIGIT)
+  ({Token.string == ":"}|{Token.string == "-"}|{Token.string == "."}) TWO_DIGIT
+ )
+):time2
+ -->
+ :time1.Time = {kind = "positive", rule = "TimeDigitalContextConj"},
+
+:time2.Time = {kind = "positive", rule = "TimeDigitalContextConj"}

@@ -1,0 +1,19 @@
+Phase: Modifier
+Input: Lookup Token
+Options: control=appelt
+
+/*
+ * Allows a drug modifier ("Retard","Rescue") within a prescription 
+ * i.e. Carbamazepine Retard 100mg twice daily
+ */
+
+
+Rule: drug_mod
+(
+	({Lookup.majorType == drug}):drug
+	{Lookup.majorType == modifier}
+):match
+-->
+:match.Drug = { name = :match@string, rule = drug_modifier, type = :drug.Lookup.minorType }
+
+

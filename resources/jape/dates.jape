@@ -1,0 +1,13 @@
+Phase: Dates
+Input: Prescription
+Options: control=appelt
+
+Rule: Basic
+(
+	{Prescription}
+):match
+-->
+{
+	Annotation prescription = bindings.get("match").iterator().next();
+	prescription.getFeatures().put("date", doc.getFeatures().get("normalized-date"));
+}

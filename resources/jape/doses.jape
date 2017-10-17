@@ -1,0 +1,11 @@
+Phase: DrugStatus
+Input:Number Token
+Options: control=appelt
+
+Rule: Tablets
+(
+	{Number}
+	{Token.string ==~ "(?i:tablets?)"}
+):match
+-->
+:match.Measurement = { rule = Tablets, value = :match.Number.value, unit = :match.Token.string }

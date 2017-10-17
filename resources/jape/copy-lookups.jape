@@ -1,0 +1,73 @@
+Phase: CopyLookups
+Input:Lookup Token
+Options: control=appelt
+
+/*
+ * Convert drug name lookups to Drug annotations where the type
+ * of the drug (the minorType) becomes a type feature
+ */
+
+
+Rule: drugs
+(
+	{Lookup.majorType == drug}
+	{Token.string ==~ "(?i:dec(anoate)?)"}
+):match
+-->
+:match.Drug = { name = :match@string, rule = drugs, route = "im", type = :match.Lookup.minorType }
+
+
+Rule: drugs
+(
+	{Lookup.majorType == drug}
+):match
+-->
+:match.Drug = { name = :match@string, rule = drugs, route = :match.Lookup.route, type = :match.Lookup.minorType }
+
+/*
+ * Copy terms that appear to suggest a change of status for a drug
+ * into a Keyword annotation with a kind feature that shows it
+ * is a keyword related to a change in prescription
+ */
+Rule: status
+(
+	{Lookup.majorType == status}
+):match
+-->
+:match.Keyword = { rule = status, kind = "prescription_change", type = :match.Lookup.minorType }
+
+/*
+ * Copy keywords that allow us to spot irrelevant mentions of a drug
+ * into a Keyword annotation with a kind feature that shows that the
+ * word is irrelevant
+ */
+Rule: historic
+(
+	{Lookup.majorType == historic}
+):match
+-->
+:match.Keyword = { rule = irrelevant, kind = "historic" }
+
+Rule: family
+(
+	{Lookup.majorType == family}
+):match
+-->
+:match.Keyword = { rule = irrelevant, kind = "family" }
+
+
+Rule: route
+(
+	{Lookup.majorType == route}
+):match
+-->
+:match.Route = { rule = route, type = :match.Lookup.minorType }
+
+
+
+Rule: indicator
+(
+	{Lookup.majorType == indicator}
+):match
+-->
+:match.Keyword = { rule = indicator, kind = "indicator" }

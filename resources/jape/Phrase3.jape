@@ -1,0 +1,12 @@
+Phase: Phrase3
+Input: Phrase2
+Options: control = appelt
+
+
+Rule: phrase3
+(
+{Phrase2}
+):match
+-->
+:match.Phrase3 = {rule = phrase3, text = :match@string}
+

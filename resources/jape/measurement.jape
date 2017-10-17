@@ -1,0 +1,11 @@
+Phase: Numbers
+Input: Numeric Token Split Lookup Time
+Options: control=appelt
+
+Rule: measurement1
+(
+	{Numeric}
+	({Lookup.minorType == unit}):unit
+):match
+-->
+:match.Measurement = { rule = measurement1, quantity = :match.Numeric.value, units =:unit@string}

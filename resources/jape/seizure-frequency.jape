@@ -1,0 +1,75 @@
+Phase: SeizureFrequency
+Input: Numeric Measurement DoseFrequency Lookup Lookup2 Range
+Options: control=appelt
+
+Rule: seizureFrequency0
+(
+    ({Numeric})*
+    {Lookup.string =~ "seizures" , Lookup.Negation == "Affirmed"}
+    ({Numeric})*
+    {DoseFrequency}
+):match
+-->
+:match.SeizureFrequency = { rule = seizureFrequency0, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, frequency = :match.DoseFrequency.frequency, period = :match.DoseFrequency.time-unit, when =:match.DoseFrequency.when}
+
+
+Rule: seizureFrequency1
+Priority: 100
+(
+    ({Range})
+    {Lookup.string =~ "seizures" , Lookup.Negation == "Affirmed"}
+    ({Numeric})*
+    {DoseFrequency}
+):match
+-->
+:match.SeizureFrequency = { rule = seizureFrequency1, PREF = "Fit Frequency" ,CUI = "C0149775	
+", lower = :match.Range.N1, upper = :match.Range.N2, frequency = :match.DoseFrequency.frequency, period = :match.DoseFrequency.time-unit, when =:match.DoseFrequency.when}
+
+
+
+
+
+Rule: seizureFreeExplicit
+(
+    {Lookup.PREF == "Seizure free"}
+    ({Numeric})+
+    ({DoseFrequency})+
+):match
+-->
+:match.SeizureFrequency = { rule = seizureFreeExplicit, PREF = "Seizure free", CUI = "C1299590	", value = :match.Numeric.value, period = :match.DoseFrequency.time-unit}
+
+Rule: seizureFreeExplicit2
+(
+    {Lookup.PREF == "Seizure free"}
+    {!Numeric}
+    ({DoseFrequency})+
+):match
+-->
+:match.SeizureFrequency = { rule = seizureFreeExplicit2, PREF = "Seizure free", CUI = "C1299590	", value = "1", period = :match.DoseFrequency.time-unit}
+
+
+
+
+
+
+
+
+
+
+Rule: seizureFreeImplicit
+(
+    {Lookup.string =~ "seizure" , Lookup.Negation == "Negated"}
+    ({Numeric})+
+    ({DoseFrequency})+
+):match
+-->
+:match.SeizureFrequency = { rule = seizureFreeImplicit, PREF = "Seizure free", CUI = "C1299590", value = :match.Numeric.value, period = :match.DoseFrequency.time-unit}
+
+Rule: seizureFreeImplicit2
+(
+    {Lookup.string =~ "seizure" , Lookup.Negation == "Negated"}
+    ({DoseFrequency})+
+):match
+-->
+:match.SeizureFrequency = { rule = seizureFreeImplicit2, PREF = "Seizure free", CUI = "C1299590", value = "1", period = :match.DoseFrequency.time-unit}

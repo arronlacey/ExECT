@@ -1,0 +1,138 @@
+Phase: DrugFrequency
+Input: Numeric Token Split Lookup Lookup2 Time
+Options: control=appelt
+
+Rule: XPerDay1
+(
+	{Numeric}
+	{Token.string == "times"}
+	({Token.string == "a"}|{Token.string == "per"})
+	{Token.string == "day"}
+):match
+-->
+:match.DoseFrequency = { rule = XPerDay, frequency = :match.Numeric.value, time-unit = "day", interval = 1d },
+:match.Ignore = {}
+
+Rule: XPerDay2
+(
+	{Token.string == "once"}
+	({Token.string == "a"}|{Token.string == "per"})
+	{Token.string == "day"}
+):match
+-->
+:match.DoseFrequency = { rule = XPerDay, frequency = 1d, time-unit = "day", interval = 1d },
+:match.Ignore = {}
+
+Rule: XPerDay3
+(
+	
+	{Token.string == "twice"}
+	({Token.string == "a"}|{Token.string == "per"})
+	{Token.string == "day"}
+):match
+-->
+:match.DoseFrequency = { rule = XPerDay, frequency = 2d, time-unit = "day", interval = 1d },
+:match.Ignore = {}
+
+Rule: XDaily1
+(
+	{Numeric}
+	({Token.string == "times"})?
+	{Token.string == "daily"}
+):match
+-->
+:match.DoseFrequency = { rule = XPerDay, frequency = :match.Numeric.value, time-unit = "day", interval = 1d },
+:match.Ignore = {}
+
+Rule: XDaily2
+(	
+	{Token.string == "once"}
+	{Token.string == "daily"}
+):match
+-->
+:match.DoseFrequency = { rule = XPerDay, frequency = 1d, time-unit = "day", interval = 1d },
+:match.Ignore = {}
+
+Rule: XDaily3
+(	
+	{Token.string == "twice"}
+	{Token.string == "daily"}
+):match
+-->
+:match.DoseFrequency = { rule = XPerDay, frequency = 2d, time-unit = "day", interval = 1d },
+:match.Ignore = {}
+
+Rule: EveryXHours
+(
+	{Token.string == "every"}
+	{Numeric}
+	{Token.string == "hours"}
+):match
+-->
+:match.DoseFrequency = { rule = EveryXHours, frequency = 1d, time-unit = "hour", interval = :match.Numeric.value },
+:match.Ignore = {}
+
+Rule: EveryXDays
+(
+	{Token.string == "every"}
+	{Numeric}
+	{Token.string == "days"}
+):match
+-->
+:match.DoseFrequency = { rule = EveryXDays, frequency = 1d, time-unit = "day", interval = :match.Numeric.value },
+:match.Ignore = {}
+
+Rule: EveryXWeeks
+(
+	{Token.string == "every"}
+	{Numeric}
+	{Token.string == "weeks"}
+):match
+-->
+:match.DoseFrequency = { rule = EveryXWeeks, frequency = 1d, time-unit = "week", interval = :match.Numeric.value },
+:match.Ignore = {}
+
+Rule: EveryXMonths
+(
+	{Token.string == "every"}
+	{Numeric}
+	{Token.string == "months"}
+):match
+-->
+:match.DoseFrequency = { rule = EveryXMonths, frequency = 1d, time-unit = "month", interval = :match.Numeric.value },
+:match.Ignore = {}
+
+//this should be in a seperate phase with an optional DoseFrequency at the beginning
+Rule: When
+(
+	{Token.string == "at"}
+	{Time}
+):match
+-->
+:match.DoseFrequency = { rule = AtTime, frequency = 1d, time-unit = "day", interval = 1d, when = :match.Time@string },
+:match.Ignore = {}
+
+Rule: FrequencyLookup
+(
+	{Lookup2.majorType == frequency}
+):match
+-->
+:match.Ignore = {},
+{
+	Annotation lookup = bindings.get("match").iterator().next();
+
+	try {
+		FeatureMap params = Factory.newFeatureMap();
+		params.put("rule","FrequencyLookup");
+		if (lookup.getFeatures().containsKey("frequency")) params.put("frequency", Double.valueOf(lookup.getFeatures().get("frequency").toString()));
+		if (lookup.getFeatures().containsKey("time-unit")) params.put("time-unit", lookup.getFeatures().get("time-unit"));
+		if (lookup.getFeatures().containsKey("interval")) params.put("interval", Double.valueOf(lookup.getFeatures().get("interval").toString()));
+		if (lookup.getFeatures().containsKey("when")) params.put("when", lookup.getFeatures().get("when"));
+
+		outputAS.add(lookup.getStartNode().getOffset(), lookup.getEndNode().getOffset(), "DoseFrequency", params);
+	}
+	catch (Exception e) {
+		//this shouldn't be possible
+		e.printStackTrace();
+	}
+}

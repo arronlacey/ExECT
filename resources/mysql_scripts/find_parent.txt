@@ -1,0 +1,1 @@
+select distinct a.CUI1, a.CUI2, C.STR as child, b.STR as parent from mrrel a inner join mrconso b on a.CUI2 = b.CUI inner join mrconso c on a.CUI1 = c.CUI where c.CUI like "C402347%" and REL = "PAR" and b.LAT = "ENG" and c.LAT = "ENG" and b.TS="P" and b.ISPREF="Y";

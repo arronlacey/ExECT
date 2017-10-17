@@ -1,0 +1,27 @@
+Phase: Exclusions
+Input:Drug Measurement Keyword DoseFrequency Token Split
+Options: control=appelt
+
+Rule: FamilyPrescriptions
+Priority: 100
+(
+	{Keyword.kind == "family"}
+	(
+		(({Measurement}({DoseFrequency})?)|{Keyword.kind == "prescription_change"})*
+		({Token.string == "of"})?
+		{Drug}
+		({Measurement})*
+		({DoseFrequency})?
+	)+
+):match
+-->
+{
+	AnnotationSet match = bindings.get("match");
+
+	AnnotationSet sentences = inputAS.get("Sentence", match.firstNode().getOffset(), match.lastNode().getOffset());
+
+	AnnotationSet prescriptions = inputAS.get("Prescription", sentences.firstNode().getOffset(), sentences.lastNode().getOffset());
+
+	//TODO instead of removing just rename for easier debugging	
+	inputAS.removeAll(prescriptions);
+}

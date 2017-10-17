@@ -1,0 +1,30 @@
+Phase: NP
+
+Input: Token
+
+/*
+Rule: NP1
+(
+  ({Token.category == "DT"}|{Token.category == "PRP$"})?
+  ({Token.category == "RB"}|{Token.category == "RBR"}|{Token.category == "RBS"})*
+  ({Token.category == "JJ"}|{Token.category == "JJR"}|{Token.category == "JJS"})*
+  ({Token.category == "NN"}|{Token.category == "NNS"})+
+)
+:nounPhrase -->
+  :nounPhrase.NP = {kind="NP", rule=NP1}
+*/
+Rule: NP2
+(
+  ({Token.category == "NNP"})+
+)
+:nounPhrase -->
+  :nounPhrase.NP = {kind="NP", rule=NP2}
+/*
+Rule: NP3
+(
+  ({Token.category == "DT"})?
+  ({Token.category == "PRP"})
+)
+:nounPhrase -->
+  :nounPhrase.NP = {kind="NP", rule=NP3}
+*/

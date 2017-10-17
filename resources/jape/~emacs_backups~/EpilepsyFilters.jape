@@ -1,0 +1,21 @@
+Phase: EpilepsyFilters
+Input: Investigations Mentions Lookup
+Options: control=appelt
+
+
+Rule: getMentions
+(
+  {Lookup}
+):Ytag
+-->
+{
+  AnnotationSet YtagAS = (AnnotationSet) bindings.get("Ytag");
+
+  // get Xtag info from within Ytag annotation
+  AnnotationSet XtagAS = inputAS.get("Mentions", YtagAS.firstNode().getOffset(), YtagAS.lastNode().getOffset());
+
+
+  // create new annotation              
+ FeatureMap features = Factory.newFeatureMap();                  
+  outputAS.add(XtagAS.firstNode(), XtagAS.lastNode(), "X", features);
+}

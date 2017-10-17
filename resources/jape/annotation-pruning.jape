@@ -1,0 +1,37 @@
+Imports: {import static gate.Utils.*; }
+
+Phase: AnnotationPruning
+Input: Lookup Sentence
+Options: control=appelt
+
+/*
+ * Remove annotations (mainly of type abbreviationOf) where tighter rules are needed 
+ * i.e. "EEG with spike-wave complexes" exists in UMLS, but not "checked EEG and there appears to be with spike wave-complexes"
+ * "spike wave complexes" therefore an abbreviationOf "EEG is abnormal, with spike wave-complexes",
+ * but only when the word "EEG" is in close proximity to "spike wave complexes" - this is where we need JAPE to strip out
+ * "spike-wave complexes" where EEG is not found
+ */
+
+
+Rule: annoPrune
+    {!Lookup.label =~ "EEG"}
+	({Lookup.abbreviationOf =~ "EEG"}):label
+	{!Lookup.label =~ "EEG"}
+-->
+:label{ 
+  Annotation lookup = gate.Utils.getOnlyAnn(labelAnnots);
+  inputAS.remove(lookup);  
+}
+
+
+
+
+Rule: annoPrune
+    {!Lookup.label =~ "mri"}
+	({Lookup.abbreviationOf =~ "MRI"}):label
+	{!Lookup.label =~ "mri"}
+-->
+:label{ 
+  Annotation lookup = gate.Utils.getOnlyAnn(labelAnnots);
+  inputAS.remove(lookup);  
+}

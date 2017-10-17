@@ -1,0 +1,12 @@
+Phase: Investigations
+Input: Investigations Lookup
+Options: control=appelt
+
+
+Rule: getInvestigations
+(
+    {Investigations, Lookup}
+):match
+-->
+:match.Investigations = { rule = getInvestigations, PREF = :match.Lookup.PREF  ,CUI = :match.Lookup.inst, STY = :match.Lookup.STY, Negation = :match.Lookup.Negation,
+Experiencer = :match.Lookup.Temporality}

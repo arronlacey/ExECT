@@ -1,0 +1,12 @@
+Phase: Lookaround2
+Input: LookAround Phrase2
+Options: control = appelt
+
+
+Rule: lookAround2
+(
+{LookAround}
+):match
+-->
+:match.LookAround2 = {rule = LookAround2, text = :match@string}
+
