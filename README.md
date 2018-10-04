@@ -1,6 +1,6 @@
-# Epilepsy-GATE-app
+# ExECT
 
-This application uses the open source GATE framework to build an application to extracts epilepsy information from clinic letters. It makes use of the Bio-YODIE GATE plugin (https://gate.ac.uk/applications/bio-yodie.html) as well as the South London and Maudsley medication application (https://github.com/KHP-Informatics/brc-gate-pharmacotherapy)
+ExECT uses the open source GATE framework to build an application to extracts epilepsy information from clinic letters. It makes use of the Bio-YODIE GATE plugin (https://gate.ac.uk/applications/bio-yodie.html) as well as the South London and Maudsley medication application (https://github.com/KHP-Informatics/brc-gate-pharmacotherapy)
 
 ## Instructions
 
