@@ -2,6 +2,10 @@ Phase: PrescriptionCoref
 Input:Prescription
 Options: control=appelt
 
+/*
+ * SLaM JAPE file
+*/
+
 Rule: CoRef
 (
 	{Prescription.status == "stop"}

@@ -1,0 +1,53 @@
+Phase: LazyPrescription
+Input: Measurement Token Lookup
+Options: control=all
+
+/* 
+ * JAPE rules for when multiple doses are reeled off for just one drug
+*/
+
+
+
+/* This rule picks up way too much
+*
+*Rule: lazyMatch1
+*Priority: 25
+*(   
+*    
+*    ({Lookup.STY=="Pharmacologic Substance"} | {Lookup.STY=="Clinical Drug"})
+*    {Measurement}
+*
+*):match
+*-->
+*:match.Prescription = { rule = lazyMatch1,  drug = :match.Lookup.PREF,  CUI = :match.Lookup.inst, dose-val = :match.Measurement.quantity, dose-unit =:match.Measurement.units, dose-frequency = "1", time-unit = "day"}
+*/
+
+
+Rule: lazyMatch2
+Priority: 75
+(   
+    
+    ({Lookup.STY=="Pharmacologic Substance"} | {Lookup.STY=="Clinical Drug"})
+    ({Measurement}):m1
+    ({Token})?
+    ({Measurement}):m2
+
+):match
+-->
+:match.Prescription = { rule = lazyMatch2,  drug = :match.Lookup.PREF,  CUI = :match.Lookup.inst, dose-val1 = :m1.Measurement.quantity, dose-val2 = :m2.Measurement.quantity, dose-unit1 =:m1.Measurement.units, dose-unit2 =:m2.Measurement.units,dose-frequency = "1", time-unit = "day"}
+
+
+Rule: lazyMatch3
+Priority: 100
+(   
+    
+    ({Lookup.STY=="Pharmacologic Substance"} | {Lookup.STY=="Clinical Drug"})
+    ({Measurement}):m1
+    ({Token})?
+    ({Measurement}):m2
+    ({Token})?
+    ({Measurement}):m3
+
+):match
+-->
+:match.Prescription = { rule = lazyMatch3,  drug = :match.Lookup.PREF,  CUI = :match.Lookup.inst, dose-val1 = :m1.Measurement.quantity, dose-val2 = :m2.Measurement.quantity, dose-val3 = :m3.Measurement.quantity, dose-unit1 =:m1.Measurement.units, dose-unit2 =:m2.Measurement.units,does-unit3=:m3.Measurement.units ,dose-frequency = "1", time-unit = "day"}

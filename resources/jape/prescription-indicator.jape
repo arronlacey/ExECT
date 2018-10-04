@@ -2,6 +2,10 @@ Phase: PrescriptionIndicators
 Input:Drug Keyword Token Prescription
 Options: control=appelt
 
+/*
+ * SLaM JAPE file
+*/
+
 Rule: Skip
 Priority: 1000
 (

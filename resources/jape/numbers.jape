@@ -10,3 +10,13 @@ Rule: Numerals
 :match.Numeric = { rule = Numerals, value = :match@string}
 
 
+Rule: Numerals
+(
+	{Token.kind == number}
+	{Token.string == "."}
+	{Token.kind == number}
+):match
+-->
+:match.Numeric = { rule = Numerals, value = :match@string}
+
+

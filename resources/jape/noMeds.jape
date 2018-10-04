@@ -1,0 +1,12 @@
+Phase: medFinding
+Input: Lookup Lookup2
+Options: control=appelt	
+
+Rule: noMeds
+(
+	{Lookup.PREF == "Medicine"}
+	{Lookup2.minorType == "CUI"}
+):item
+-->
+	:item.noMeds = {rule = "noMeds", PREF = :item.Lookup.PREF , CUI = "C0746919", Medication = "Nil", Negation = :item.Lookup.Negation,
+	Experiencer = :item.Lookup.Experiencer, Temporality = :item.Lookup.Temporality,}

@@ -1,0 +1,16 @@
+Imports: {import static gate.Utils.*; }
+
+Phase: addSeizureType
+Input:Lookup Lookup3 SeizureMentions
+Options: control=appelt
+
+
+Rule: prob1
+(
+	({Lookup, Lookup3, SeizureMentions}):umls
+):match
+-->
+:umls {
+  getOnlyAnn(umlsAnnots).getFeatures().put("SeizureType", 
+    getOnlyAnn(bindings.get("umls)).getFeatures().get("PREF"));
+}

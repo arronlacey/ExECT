@@ -1,0 +1,29 @@
+Phase: seizureExclude2
+Input: SeizureMentions
+Options: control=appelt
+
+
+
+Rule: seziureCurrentSince
+Priority:99
+(
+    {SeizureMentions.Status =~ "seizureFree"}
+    ({SeizureMentions.rule == "seizurecurrent"}):umls
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+
+
+Rule: seziureCurrentSince
+Priority:99
+(
+    {OtherPerson}
+    {!Person}
+    ({SeizureMentions.rule == "seizurecurrent"}):umls
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}

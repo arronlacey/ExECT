@@ -1,0 +1,11 @@
+Phase: rangeOrNumber
+Input: Numeric Range
+Options: control=appelt
+
+
+Rule: rangeOrNumber
+(
+    {Numeric} | {Range}
+):match
+-->
+:match.NumberRange = { rule = rangeOrNumber, value = :match.Numeric.value, N1 = :match.Range.N1, N2 = :match.Range.N2}

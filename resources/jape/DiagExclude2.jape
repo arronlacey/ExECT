@@ -1,0 +1,21 @@
+Phase: DiagExclude2
+Input:  Lookup Investigation
+Options: control=all
+
+
+Rule: DiagExclude2
+(   
+    ()
+    ({Lookup.STY == "Disease or Syndrome"}):umls
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+
+
+
+
+//:umls { 
+  //inputAS.removeAll(umlsAnnots);
+//}

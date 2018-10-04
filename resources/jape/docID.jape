@@ -1,0 +1,13 @@
+Imports: {import static gate.Utils.*; }
+
+Phase: Meta
+Input: meta
+Options: control=all
+
+Rule: docID
+(
+	{meta.name == resourceName}
+):match
+-->
+:match.DocID = {docID = "DocID"}
+

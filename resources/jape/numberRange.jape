@@ -6,7 +6,7 @@ Options: control=appelt
 Rule: numberRange
 (
     ({Numeric}):n1
-    ({Token.string == "to"} | {Token.string == "-"} | {Token.string == "or"})
+    ({Token.string == "to"} | {Token.string == "-"} | {Token.string == "or"} | {Token.string == "–"})
     ({Numeric}):n2
 ):match
 -->

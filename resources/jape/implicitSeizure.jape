@@ -1,0 +1,183 @@
+Phase: iSeizureFrequency
+Input: Numeric Calendar Lookup3 Range TIMEX3 Sentence Date Split
+Options: control=appelt
+
+
+
+
+
+
+
+Rule: seizureFrequency0
+(
+    ({Numeric})*
+    {Lookup3.minorType == "seizure"}
+    ({Numeric})*
+    {DoseFrequency}
+):match
+-->
+:match.SeizureMentions = { rule = iseizureFrequency0, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, frequency = :match.DoseFrequency.frequency, period = :match.Calendar@string, when =:match.DoseFrequency.when}
+
+
+Rule: seizureFrequency1
+Priority: 100
+(
+    ({Range})
+    {Lookup3.minorType == "seizure"}
+    ({Numeric})*
+    {DoseFrequency}
+):match
+-->
+:match.SeizureMentions = { rule = iseizureFrequency1, PREF = "Fit Frequency" ,CUI = "C0149775	
+", lower = :match.Range.N1, upper = :match.Range.N2, frequency = :match.DoseFrequency.frequency, period = :match.Calendar@string, when =:match.DoseFrequency.when}
+
+
+
+Rule: seizureFrequency2
+Priority: 100
+(
+    {Lookup3.minorType == "seizure" }
+    ({Numeric})*
+    {DoseFrequency}
+):match
+-->
+:match.SeizureMentions = { rule = iseizureFrequency2, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, frequency = :match.DoseFrequency.frequency, period = :match.Calendar@string, when =:match.DoseFrequency.when}
+
+
+Rule: seziureSince
+(
+    {TIMEX3.timexType == "DATE"}
+    {Lookup3.minorType == "seizure"}
+    ({Numeric}):N2
+):match
+-->
+:match.SeizureMentions = { rule = seizurenumSince1, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, since = :match.TIMEX3@string}
+
+
+
+Rule: seziureSince
+(
+    ({Numeric}):N2
+    {TIMEX3.timexType == "DATE"}
+    {Lookup3.minorType == "seizure"}
+):match
+-->
+:match.SeizureMentions = { rule = seizurenumSince1, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, since = :match.TIMEX3@string}
+
+
+
+Rule: seziureSince
+(
+    ({Numeric}):N1
+    {Lookup3.minorType == "seizure"}
+    {Date}
+):match
+-->
+:match.SeizureMentions = { rule = seizurenumSince2, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, since = :match.Date@string}
+
+
+Rule: seziureSince
+(
+    {Lookup3.minorType == "seizure"}
+    ({Numeric}):N1
+    {Date}
+):match
+-->
+:match.SeizureMentions = { rule = seizurenumSince2, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, since = :match.Date@string}
+
+
+Rule: seziureSince
+(
+    ({Range})
+    {Lookup3.minorType == "seizure"}
+    {Date}
+):match
+-->
+:match.SeizureMentions = { rule = seizurerangeSince, PREF = "Fit Frequency" ,CUI = "C0149775	
+", lower = :match.Range.N1, upper = :match.Range.N2, since = :match.Date@string}
+
+
+Rule: seizureFreeImplicit
+(
+    {Lookup3.minorType == "seizure" }
+    ({Numeric})+
+    ({DoseFrequency})+
+):match
+-->
+:match.SeizureMentions = { rule = iseizureFreeImplicit, PREF = "Seizure free", CUI = "C1299590", value = :match.Numeric.value, period = :match.Calendar@string}
+
+Rule: seizureFreeImplicit2
+(
+    {Lookup3.minorType == "seizure" }
+    ({DoseFrequency})+
+):match
+-->
+:match.SeizureMentions = { rule = iseizureFreeImplicit2, PREF = "Seizure free", CUI = "C1299590", value = "1", period = :match.Calendar@string}
+
+
+
+
+
+
+
+Rule: previousSeizure
+(
+    {Lookup3.minorType == "seizure"}
+    ({Range}):N1
+    {Date}
+):match
+-->
+:match.SeizureMentions = { rule = previousSeizure1, PREF = "Fit Frequency" ,CUI = "C0149775	
+", lower = :match.Range.N1, upper = :match.Range.N2, since = :match.Date@string}
+
+
+Rule: previousSeizure
+(
+    ({Range}):N1
+    {Lookup3.minorType == "seizure"}
+    {Date}
+):match
+-->
+:match.SeizureMentions = { rule = previousSeizure1, PREF = "Fit Frequency" ,CUI = "C0149775	
+", lower = :match.Range.N1, upper = :match.Range.N2, since = :match.Date@string}
+
+
+
+
+Rule: previousSeizure
+(
+    {Lookup3.minorType == "seizure"}
+    ({Numeric}):N2
+    {TIMEX3.timexType == "DATE"}
+):match
+-->
+:match.SeizureMentions = { rule = previousSeizure2, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, since = :match.TIMEX3@string}
+
+
+Rule: previousSeizure
+(
+    ({Numeric}):N2
+    {Lookup3.minorType == "seizure"}
+    {TIMEX3.timexType == "DATE"}
+):match
+-->
+:match.SeizureMentions = { rule = previousSeizure2, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, since = :match.TIMEX3@string}
+
+
+Rule: previousSeizure
+(
+    {Lookup3.minorType == "seizure"}
+    {TIMEX3.timexType == "DATE"}
+):match
+-->
+:match.SeizureMentions = { rule = previousSeizure3, PREF = "Fit Frequency" ,CUI = "C0149775	
+", lower = :match.Range.N1, upper = :match.Range.N2, since = :match.TIMEX3@string}
+

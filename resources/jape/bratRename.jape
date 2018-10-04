@@ -1,0 +1,13 @@
+Phase: BratRename
+Input: Disease
+Options: control=all
+
+
+Rule: Disease2
+(
+    {Disease}
+):match
+-->
+:match.LookupList = {rule = Disease2, string = :match.Disease@string}
+
+

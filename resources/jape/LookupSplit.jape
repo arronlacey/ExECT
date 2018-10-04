@@ -1,0 +1,13 @@
+Phase: LookupSplit
+Input: Token
+Options: control=appelt
+
+Rule: Token2Lookup2
+
+(
+
+{Token.string == "?"}
+
+):match
+-->
+:match.Lookup2 = {Level = 3, majorType = "status", minorType = "probability"}

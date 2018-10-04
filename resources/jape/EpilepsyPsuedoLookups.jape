@@ -1,0 +1,6 @@
+MultiPhase: EpilepsyPsuedoLookups
+Phases:
+
+lookup2seizure
+SingleSeizure
+medFinding

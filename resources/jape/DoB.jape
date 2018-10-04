@@ -1,0 +1,27 @@
+Phase: Dates
+Input:TIMEX3 Lookup2 DateBio
+Options: control=appelt
+
+
+/* 
+ * Get date of birth
+*/
+
+Rule: DoB_2
+(
+	{Lookup2.majorType == "person", Lookup2.minorType == "health_terms"}
+	{DateBio}	
+):match
+-->
+:match.Date_of_Birth = { rule = DoB_2, value = :match.DateBio.value}
+
+
+/* Rule: DoB_1
+*(
+*	{Lookup2.majorType == "person", Lookup2.minorType == "health_terms"}
+*	{TIMEX3.foundByRule == "date_r0c-explicit"}|{TIMEX3.foundByRule == "date_r0h-explicit"}
+	
+*):match
+*-->
+*:match.Date_of_Birth = { rule = DoB_1, value = :match.TIMEX3.timexValue} 
+*/

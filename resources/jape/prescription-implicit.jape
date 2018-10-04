@@ -1,41 +1,48 @@
 Phase: PrescriptionImplicit
-Input:Drug Measurement DoseFrequency Prescription Keyword Split NP
+Input:Drug Measurement Lookup DoseFrequency Prescription Medmod Split NP
 Options: control=appelt
 
+/*
+ * SLaM JAPE file
+*/
+
 Rule: SecondDose
-Priority: 100
 (
 	({Prescription}):p1
 	({Measurement.dimension!=time, !Prescription}
 	{DoseFrequency}):p2
 )
 -->
-:p2.Prescription = { rule = "secondDose", drug = :p1.Prescription.drug, CUI = :p1.Prescription.CUI, route = :p1.Prescription.route, status = :p1.Prescription.status, dose = :p2.Measurement@string, dose-value = :p2.Measurement.value, dose-unit = :p2.Measurement.unit, frequency = :p2.DoseFrequency.frequency, time-unit = :p2.DoseFrequency.time-unit, interval = :p2.DoseFrequency.interval, when = :p2.DoseFrequency.when, drug-type = :p1.Prescription.drug-type }
+:p2.Prescription = { rule = "secondDose", drug = :p1.Prescription.drug, CUI = :p1.Prescription.CUI, route = :p1.Prescription.route, status = :p1.Prescription.status, dose = :p2.Measurement@string, dose-val = :p2.Measurement.quantity, dose-unit = :p2.Measurement.units, dose-frequency = :p2.DoseFrequency.frequency, time-unit = :p2.DoseFrequency.time-unit, dose-interval = :p2.DoseFrequency.interval, when = :p2.DoseFrequency.when, drug-type = :p1.Prescription.drug-type }
 
 
-Rule: WeanOff
-Priority: 100
-(
-	({Prescription}):p
-	({Keyword}|{Measurement})*
-	{Keyword.kind == "prescription_change", Keyword.type == "stop"}
-):match
--->
-:match.Prescription = { rule = "weanOff", drug = :p.Prescription.drug, route = :p.Prescription.route, status = "stop", dose = :p.Prescription.dose, dose-value = :p.Prescription.dose-value, dose-unit = :p.Prescription.dose-unit, frequency = :p.Prescription.frequency, time-unit = :p.Prescription.time-unit, interval = :p.Prescription.interval, when = :p.Prescription.when, drug-type = :p.Prescription.drug-type },
-{
-	Annotation prescription = bindings.get("p").iterator().next();
-	inputAS.remove(prescription);
-}
 
 /*
-//This rule matched over such long spans that it really didn't help
-//removing it boosted P from 0.82 to 0.86!
-Rule: SimpleChange
-Priority: 50
-(
-	{Keyword.kind == "prescription_change"}
-	{Drug}
-):match
--->
-:match.Prescription = { rule = "simpleChange", drug = :match.Drug.name, status = :match.Keyword.type }
+*Rule: WeanOff
+*(
+*	({Prescription}):p
+*	({Medmod}|{Measurement})*
+*):match
+*-->
+*:match.Prescription = { rule = "weanOff", drug = :p.Prescription.drug, route = :p.Prescription.route, status = "stop", dose = :p.Prescription.dose, dose-value = :p.Prescription.dose-value, dose-unit = :p.Prescription.dose-unit, dose-frequency = :p.Prescription.frequency, time-unit = :p.Prescription.time-unit, dose-interval = :p.Prescription.interval, when = :p.Prescription.when, drug-type = :p.Prescription.drug-type },
+*{
+*	Annotation prescription = bindings.get("p").iterator().next();
+*	inputAS.remove(prescription);
+*}
+*/
+
+
+
+
+/*
+*This rule matched over such long spans that it really didn't help
+*removing it boosted P from 0.82 to 0.86!
+*Rule: SimpleChange
+*Priority: 50
+*(
+*	{Medmod.kind == "prescription_change"}
+*	{Drug}
+*):match
+*-->
+*:match.Prescription = { rule = "simpleChange", drug = :match.Drug.name, status = :match.Medmod.minorType }
 */

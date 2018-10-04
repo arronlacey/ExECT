@@ -1,0 +1,52 @@
+Phase: SeizureExclude1
+Input: SeizureFrequency SeizureSince SeizureFree Sentence Context Lookup2 
+Options: control=appelt
+
+/* 
+ *Exclude some seizure mentions/frequency if context suggests not talking about current siezures
+ * or talking about negation
+*/
+
+Rule: seizureExclude
+Priority: 99
+(   
+    ({Context.context != current})+
+    ({SeizureFrequency} | {SeizureSince} | {SeizureFree}):umls
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+
+
+Rule: seizureExclude
+Priority: 99
+(   
+    ({Lookup2.minorType==probability, Lookup2.Level !=5} | {Lookup2.minorType==probability, Lookup2.Level !=4})
+    ({SeizureFrequency} | {SeizureSince} | {SeizureFree}):umls
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+
+
+
+
+/*
+ * unless context is current
+*/
+
+Rule: savedFromExclusion
+Priority: 100
+(   
+    {Context}
+    {Context.context==current}
+    ({SeizureFrequency} | {SeizureSince} | {SeizureFree}):umls
+):match
+-->
+{ }
+
+
+
+

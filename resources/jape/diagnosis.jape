@@ -1,23 +1,36 @@
 Phase: Diagnosis
-Input:  Lookup Sentence Split Stopwords
+Input:  Lookup Sentence 
 Options: control=all
+
+/* 
+  * Use certain Lookup.STY with diagnosis annotations 
+  * e.g. (Lookup.PREF == "Diagnosis")
+  * also includes nested diagnosis i.e. multiple diagnosis in a phrase
+  * not filtered for epilepsy specific at this stage
+*/
 
 
 Rule: getDiagnosis
-    ({Lookup.PREF == "Diagnosed"} 
-    ({Lookup.Negation == "Affirmed", Lookup.STY == "Disease or Syndrome"} | 
-	{Lookup.Negation == "Affirmed", Lookup.STY == "Sign or Symptom"} |
-	{Lookup.Negation == "Affirmed", Lookup.STY == "Finding", Lookup.PREF !~ "Medication"} | 
-	{Lookup.Negation == "Affirmed", Lookup.STY == "Mental or Behavioral Dysfunction"} |
-	({Lookup.Negation == "Affirmed", Lookup.STY == "Diagnostic Procedure"})?)*
+(
+    ({Lookup.PREF == "Diagnosis"} | {Lookup.PREF == "Diagnosed"} | {Lookup.label == "suffers"})
+    (
+    {Lookup.STY == "Disease or Syndrome"} | 
+	{Lookup.STY == "Sign or Symptom", Lookup.PREF != "Fit NOS"} | 
+	{Lookup.STY == "Mental or Behavioral Dysfunction"} |
+	{Lookup.STY == "Congenital Abnormality"} |
+	({Lookup.STY == "Diagnostic Procedure"} |
+	{Lookup.Temporality == historical})?
+	)*
 	(
-	{Lookup.Negation == "Affirmed", Lookup.STY == "Disease or Syndrome"} | 
-	{Lookup.Negation == "Affirmed", Lookup.STY == "Sign or Symptom"} |
-	{Lookup.Negation == "Affirmed", Lookup.STY == "Finding", Lookup.PREF !~ "Medication"} | 
-	{Lookup.Negation == "Affirmed", Lookup.STY == "Mental or Behavioral Dysfunction"} |
-	({Lookup.Negation == "Affirmed", Lookup.STY == "Diagnostic Procedure"})?
+	{Lookup.STY == "Disease or Syndrome"} |
+	{Lookup.STY == "Sign or Symptom", Lookup.PREF != "Fit NOS"} |
+	{Lookup.STY == "Mental or Behavioral Dysfunction"} |
+	{Lookup.STY == "Congenital Abnormality"} |
+	({Lookup.STY == "Diagnostic Procedure"})?
 	):item
-	):label
+):label
 -->
-:item.Diagnosis = { rule = "getDiagnosis", PREF = :item.Lookup.PREF  ,CUI = :item.Lookup.inst, STY = :item.Lookup.STY, Negation = :item.Lookup.Negation,
-Experiencer = :item.Lookup.Experiencer, Temporality = :item.Lookup.Temporality}
+:item.Diagnosis = { rule = "getDiagnosis", PREF = :item.Lookup.PREF, CUI = :item.Lookup.inst, STY = :item.Lookup.STY, Negation = :item.Lookup.Negation,
+Experiencer = :item.Lookup.Experiencer, Temporality = :item.Lookup.Temporality, Certainty = :item.Lookup.Certainty}
+
+

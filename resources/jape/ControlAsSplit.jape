@@ -1,0 +1,11 @@
+Phase: ControlAsSplit
+Input:SpaceToken
+Options: control=appelt
+
+
+Rule: prob1
+(
+	{SpaceToken.kind == control}
+):match
+-->
+:match.Split = {rule = ControlasSplit}

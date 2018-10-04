@@ -1,0 +1,13 @@
+Phase: DiagnosisfromSeziure
+Input:  Person Lookup3 Sentence
+Options: control=appelt
+
+Rule: DiagnosisFromSeizure
+(
+
+	({Person}
+	{Lookup3.singleSeizure!=true, Lookup3.PREF != "Fit NOS", Lookup3.PREF != "Seizure free", Lookup3.generic != "yes"})
+
+):match
+-->
+:match.Diagnosis = {rule = DiagFromSeziure, PREF = :match.Lookup3.PREF, CUI = :match.Lookup3.CUI, Negation = :match.Lookup3.Negation, Certainty = :match.Lookup3.Certainty}

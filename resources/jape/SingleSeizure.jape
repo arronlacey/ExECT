@@ -1,0 +1,18 @@
+Imports: {import static gate.Utils.*; }
+
+Phase: SingleSeizure
+Input:  Lookup3 Token timePeriods
+Options: control=appelt
+
+
+
+Rule: SingleSeizure
+(   
+    ({Token@string == "a"} | {Token@string == "one"} | {Token@string == "single"} | {Token@string == "1"})
+    ({Lookup3.Negation == Affirmed}):umls
+    {!timePeriods}
+):match
+-->
+:umls {
+  umlsAnnots.iterator().next().getFeatures().put("singleSeizure",true);
+}

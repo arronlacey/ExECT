@@ -3,6 +3,7 @@ Input:Lookup Token
 Options: control=appelt
 
 /*
+ * SLaM JAPE
  * Convert drug name lookups to Drug annotations where the type
  * of the drug (the minorType) becomes a type feature
  */

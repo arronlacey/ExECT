@@ -1,0 +1,28 @@
+Phase: removeUselessLookups
+Input:  Lookup Date Numeric
+Options: control=all
+
+
+Rule: removeUselessLookups
+
+(
+    ({Lookup.STY == "Temporal Concept"} | {Lookup.PREF == "Once A Day"} |
+    {Lookup, Date}):umls
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+
+
+
+
+Rule: removeUselessLookups
+
+(
+    ({Lookup contains Numeric}):umls
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}

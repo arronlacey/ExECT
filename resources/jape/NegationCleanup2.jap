@@ -1,0 +1,17 @@
+Imports: {import static gate.Utils.*; }
+
+Phase: NegationCleanUp
+Input: Token Trigger Lookup
+Options: control=all
+
+Rule: reverseNegation
+(
+{Trigger}
+({Token.cateogory == "VBG"})+
+({Lookup.Negation =="Negation"}):umls
+):match
+-->
+:umls {
+umlsAnnots.iterator().next().getFeatures().put("Negation","Affirmed");
+umlsAnnots.iterator().next().getFeatures().put("rule","reverseNegation");
+}

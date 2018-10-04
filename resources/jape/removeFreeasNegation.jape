@@ -1,0 +1,13 @@
+Imports: {import static gate.Utils.*; }
+
+Phase: NegationCleanUp
+Input: Trigger
+Options: control=all
+
+Rule: removeFreeAsNegation
+(
+({Trigger.minorType=="post-condition", Trigger@string=="free"}):umls
+):match
+-->
+:umls {inputAS.removeAll(umlsAnnots);
+}

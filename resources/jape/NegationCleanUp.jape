@@ -1,0 +1,52 @@
+Imports: {import static gate.Utils.*; }
+
+Phase: NegationCleanUp
+Input: NegConj Lookup Sentence Trigger Lookup3
+Options: control=all
+
+Rule: reverseNegation
+(
+{Trigger}
+({Lookup})[1,5]
+{!NegConj} 
+{!Trigger}
+({Lookup.Negation == "Negated"}):umls
+):match
+-->
+:umls {
+umlsAnnots.iterator().next().getFeatures().put("Negation","Affirmed");
+umlsAnnots.iterator().next().getFeatures().put("rule","reverseNegationa");
+}
+
+
+
+
+
+Rule: removeSeizureFreeAsNegation
+(
+({Lookup contains Trigger@string=="free"}):umls
+):match
+-->
+:umls {
+umlsAnnots.iterator().next().getFeatures().put("Negation","Affirmed");
+umlsAnnots.iterator().next().getFeatures().put("rule","reverseNegationb");
+}
+
+
+
+Rule: reverseNegation
+(
+{Trigger}
+({Lookup})[1,5]
+{!NegConj}
+({Lookup3.Negation == "Negated"}):umls
+):match
+-->
+:umls {
+umlsAnnots.iterator().next().getFeatures().put("Negation","Affirmed");
+umlsAnnots.iterator().next().getFeatures().put("rule","reverseNegationc");
+}
+
+
+
+

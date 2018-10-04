@@ -1,0 +1,12 @@
+Phase: newLine
+Input: SpaceToken
+Options: control=appelt
+
+Rule: NewLine
+
+({SpaceToken.kind==control, SpaceToken.string !=~ "[\\t]"}):br
+
+-->
+
+:br.NewLine = {}
+

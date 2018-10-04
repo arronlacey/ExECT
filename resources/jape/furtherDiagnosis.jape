@@ -1,0 +1,57 @@
+Phase: furtherDiagnosis
+Input:  MedFinding listSent Lookup Person DiseaseSeverity Sentence Split Lookup2
+Options: control=all
+
+
+
+Rule: furtherDiagnosis
+ 
+
+(
+    {MedFinding within listSent}
+)*:item
+-->
+:item.Diagnosis = { rule = "listDiagnosis", PREF = :item.MedFinding.PREF  ,CUI = :item.MedFinding.CUI, STY = :item.MedFinding.STY, Negation = :item.MedFinding.Negation,
+Experiencer = :item.MedFinding.Experiencer, Temporality = :item.MedFinding.Temporality,Certainty = :item.Lookup.certainty,}
+
+
+
+
+
+
+
+Rule: withEpilepsy
+
+(
+	({Person.majorType == "person"} | {Person.ruleFinal == "PersonFinal"} | {Lookup2.minorType==probability})
+	({Lookup.STY == "Disease or Syndrome", Lookup.Negation == "Affirmed"} |
+	{Lookup.STY == "Sign or Symptom", Lookup.PREF != "Fit NOS"} | 
+	{Lookup.STY == "Mental or Behavioral Dysfunction"} |
+	{Lookup.STY == "Congenital Abnormality"}
+	)*
+	({Lookup.STY == "Disease or Syndrome", Lookup.Negation == "Affirmed"} |
+	{Lookup.STY == "Sign or Symptom", Lookup.PREF != "Fit NOS"} |
+	{Lookup.STY == "Mental or Behavioral Dysfunction"} |
+	{Lookup.STY == "Congenital Abnormality"}
+    ):diag
+):item
+-->
+:item.Diagnosis = {rule = "withEpilepsy", PREF = :diag.Lookup.PREF  ,CUI = :diag.Lookup.inst, Negation = :diag.Lookup.Negation,
+Experiencer = :diag.Lookup.Experiencer, Temporality = :diag.Lookup.Temporality,Certainty = :diag.Lookup.Certainty}
+
+
+
+Rule: Refractory
+	
+
+(
+	{DiseaseSeverity.majorType == "treatment" ,DiseaseSeverity.minorType == "CUI" }
+	{Lookup.STY == "Disease or Syndrome"}
+):item
+-->
+:item.Diagnosis = {rule = "Refractory", PREF = :item.Lookup.PREF  ,refractory = "C1096063", Negation = :item.Lookup.Negation,
+Experiencer = :item.Lookup.Experiencer, Temporality = :item.Lookup.Temporality,Certainty = :item.Lookup.Certainty}
+
+
+
+

@@ -1,0 +1,15 @@
+Phase: RemoveSeizureMention
+Input: SeizureMention
+Options: control=all
+
+
+// remove seziure frequency to mentions of seizure control
+
+Rule: removeSeizureMention
+(   
+    ({SeizureMention@string =~ "control"}):umls
+):matches
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}

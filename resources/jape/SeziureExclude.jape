@@ -1,0 +1,19 @@
+Phase: SeizureExclude
+Input: SeziureMentions Sentence Context
+Options: control=appelt
+
+
+/* remove a seizure mention if it has a Context annotation before it
+*/
+
+
+Rule: seizureExclude
+Priority:100
+(   
+    {Context}
+    ({SeizureMention}):umls
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}

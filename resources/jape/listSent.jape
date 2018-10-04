@@ -1,0 +1,25 @@
+Phase: listSent
+Input: listPoint NewLine
+Options: control=appelt
+
+/* 
+ * Annotate beginning of a structured list
+*/
+
+Rule: listPointSentence 
+(
+({listPoint}):n1
+({NewLine}):n2
+):match
+-->
+{
+  Node start = ((AnnotationSet) bindings.get("n1"))
+               .firstNode();
+  Node end   = ((AnnotationSet) bindings.get("n2"))
+               .lastNode();
+
+  FeatureMap features = Factory.newFeatureMap();
+  features.put("rule", "listSent");
+
+  outputAS.add(start, end, "listSent", features);
+}

@@ -1,0 +1,16 @@
+Phase: medFinding
+Input: Lookup
+Options: control=appelt	
+
+Rule: medFind	
+(	
+	{Lookup.STY == "Disease or Syndrome"} | 
+	{Lookup.STY == "Sign or Symptom"} |
+	{Lookup.STY == "Finding", Lookup.PREF !~ "Medication"} | 
+	{Lookup.STY == "Mental or Behavioral Dysfunction"} |
+	{Lookup.STY == "Diagnostic Procedure"}
+):item
+-->
+:item.MedFinding = { rule = "medFinding", PREF = :item.Lookup.PREF  ,CUI = :item.Lookup.inst, STY = :item.Lookup.STY, Negation = :item.Lookup.Negation,
+Experiencer = :item.Lookup.Experiencer, Temporality = :item.Lookup.Temporality, Certainty = :item.Lookup.Certainty}
+

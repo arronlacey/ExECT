@@ -1,0 +1,23 @@
+Phase: listPoint
+Input: Numeric Split Token
+Options: control=appelt
+
+
+Rule: listPoint  
+(
+{Numeric.rule == "Numerals", Token.length == 1}
+{Split}
+):match
+-->
+:match.listPoint = {rule = "listPoint"}
+
+
+
+Rule: startList  
+(
+{Token.string == ":"}
+):match
+-->
+:match.startList = {rule = "startList", string = :match.Token.string}
+
+

@@ -6,3 +6,11 @@ times
 frequency
 measurement
 numberRange
+rangeOrNumber
+LookupSplit
+newLine
+listPoint
+listSent
+Token2Verbs
+partialDate
+longestTimePeriod

@@ -1,0 +1,12 @@
+Phase: Lookup2Annotation
+Input: Lookup
+Options: control=all
+
+
+
+Rule: Lookup2Annotation
+(   
+    {Lookup}
+):match
+-->
+:match.Annotation = {string_orig = :match.Lookup.string_orig}

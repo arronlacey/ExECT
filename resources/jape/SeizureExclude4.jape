@@ -1,0 +1,29 @@
+Phase: SeizureExclude4
+Input: SeizureFrequency SeizureSince SeizureFree Sentence History
+Options: control=first
+
+
+
+Rule: seizureExclude
+
+(   
+    {History}
+    ({SeizureFrequency}):umls
+    
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+
+
+Rule: seizureExclude
+
+(   
+    ({SeizureFrequency}):umls
+    {History}
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}

@@ -1,23 +1,23 @@
 Imports: {import static gate.Utils.*; }
 
-Phase: Probability
-Input:Lookup
+Phase: ModifyLookup
+Input:Lookup Lookup2 Lookup3 Sentence
 Options: control=appelt
 
 /*
- * FInd any umls lookup precedede by a probability term and flag it with a
- * feature for its probability
- *
- */
+ * assigns a certainty level  (1-5, 5 most certain)to Lookups 
+ * using words such as "probably", "unlikely" etc
+*/
 
 
 Rule: prob1
 (
-	{Lookup2.minorType == probability}
+	({Lookup2.minorType == probability}):prob
 	({Lookup.majorType == umls}):umls
 ):match
 -->
-:umls { 
-  umlsAnnots.iterator().next().getFeatures().put("probability",true);
+:umls {
+  getOnlyAnn(umlsAnnots).getFeatures().put("Certainty", 
+    getOnlyAnn(bindings.get("prob")).getFeatures().get("Level"));
 }
 

@@ -1,0 +1,62 @@
+Phase: Investigations
+Input: Investigation Sentence startList InvestigationFinding Mentions Conj
+Options: control=brill
+
+/* 
+  * sometimes two types of scans share the same outcome
+  * i.e. "EEG and MRI both normal"
+*/
+
+
+Rule: getInvestigationsOutcomes
+(
+    ({Investigation}):n1
+    {Conj.type == conj}
+    ({Investigation}):n2
+    ({Conj.type == leading})?
+    ({InvestigationFinding}):outcome
+):match
+-->
+:match.Investigations = { rule = InvestConj1, INVESTIGATION = :n1.Investigation@string, Outcome = :outcome.InvestigationFinding@string, 
+CUI = :outcome.InvestigationFinding.CUI, Negation = :outcome.InvestigationFinding.Negation}
+
+
+
+Rule: getInvestigationsOutcomes
+(
+    ({Investigation}):n1
+    {Conj.type == conj}
+    ({Investigation}):n2
+    ({Conj.type == leading})?
+    ({InvestigationFinding}):outcome
+):match
+-->
+:match.Investigations = { rule = InvestConj2, INVESTIGATION = :n2.Investigation@string, Outcome = :outcome.InvestigationFinding@string, 
+CUI = :outcome.InvestigationFinding.CUI, Negation = :outcome.InvestigationFinding.Negation}
+
+
+Rule: getInvestigationsOutcomes
+(
+    ({Investigation}):n1
+    ({InvestigationFinding}):outcome
+    {Conj.type == conj}
+    ({Investigation}):n2
+    ({!InvestigationFinding})
+):match
+-->
+:match.Investigations = { rule = InvestConj3, INVESTIGATION = :n1.Investigation@string, Outcome = :outcome.InvestigationFinding@string, 
+CUI = :outcome.InvestigationFinding.CUI, Negation = :outcome.InvestigationFinding.Negation}
+
+
+Rule: getInvestigationsOutcomes
+(
+    ({Investigation}):n1
+    ({InvestigationFinding}):outcome
+    {Conj.type == conj}
+    ({Investigation}):n2
+    ({!InvestigationFinding})
+):match
+-->
+:match.Investigations = { rule = InvestConj4, INVESTIGATION = :n2.Investigation@string, Outcome = :outcome.InvestigationFinding@string, 
+CUI = :outcome.InvestigationFinding.CUI, Negation = :outcome.InvestigationFinding.Negation}
+

@@ -1,0 +1,12 @@
+Phase: longestTimePeriod
+Input: timePeriods
+Options: control=appelt
+
+
+Rule: longestTimePeriod
+(
+    {timePeriods}
+):match
+-->
+:match.timePeriod = { rule = longestTimePeriod, string = :match.timePeriods@string, time-unit = :match.timePeriods.time-unit,
+									frequency = :match.timePeriods.frequency, when = :match.timePeriods.when, period = :match.timePeriods.period}

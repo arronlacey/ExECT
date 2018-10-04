@@ -1,0 +1,143 @@
+Phase: Previous
+Input: Numeric Lookup3 Range Sentence TIMEX3 startList Date listPoint Split Context3
+Options: control=appelt
+
+
+
+
+Rule: previousSeizure
+(
+    {Context3.minorType=="last"}
+    {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed"}
+    ({Range}):N1
+    {Date}
+):match
+-->
+:match.SeizureMentions = { SeizureType=:match.Lookup3.PREF, rule = previousSeizure1, PREF = "Fit Frequency" ,CUI = "C0149775	
+", lower = :match.Range.N1, upper = :match.Range.N2, when = :match.Date@string}
+
+
+Rule: previousSeizure
+(
+    ({Range}):N1
+    {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed"}
+    {Context3.minorType=="last"}
+    {Date}
+):match
+-->
+:match.SeizureMentions = { SeizureType=:match.Lookup3.PREF, rule = previousSeizure1, PREF = "Fit Frequency" ,CUI = "C0149775	
+", lower = :match.Range.N1, upper = :match.Range.N2, when = :match.Date@string}
+
+
+
+
+Rule: previousSeizure
+(
+    {Context3.minorType=="last"}
+    {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed"}
+    ({Numeric}):N2
+    {TIMEX3}
+):match
+-->
+:match.SeizureMentions = { SeizureType=:match.Lookup3.PREF, rule = previousSeizure2, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, when = :match.TIMEX3@string}
+
+
+Rule: previousSeizure
+(
+    ({Numeric}):N2
+    {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed"}
+    {Context3.minorType=="last"}
+    {TIMEX3}
+):match
+-->
+:match.SeizureMentions = { SeizureType=:match.Lookup3.PREF, rule = previousSeizure2, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, when = :match.TIMEX3@string}
+
+
+Rule: previousSeizure
+(
+    {Context3.minorType=="last"}
+    {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed"}
+    {TIMEX3}
+):match
+-->
+:match.SeizureMentions = { SeizureType=:match.Lookup3.PREF, rule = previousSeizure3a, PREF = "Fit Frequency" ,CUI = "C0149775	
+", lower = :match.Range.N1, upper = :match.Range.N2, when = :match.TIMEX3@string}
+
+
+
+Rule: previousSeizure
+(
+    {Context3.minorType=="last"}
+    {Numeric}
+    {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed"}
+    {TIMEX3}
+):match
+-->
+:match.SeizureMentions = { SeizureType=:match.Lookup3.PREF, rule = previousSeizure3b, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, upper = :match.Range.N2, when = :match.TIMEX3@string}
+
+
+
+Rule: previousSeizure
+(
+    {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed"}
+    {Context3.minorType=="last"}
+):match
+-->
+:match.SeizureMentions = { SeizureType=:match.Lookup3.PREF, rule = previousSeizure3c, PREF = "Fit Frequency" ,CUI = "C0149775	
+", when = :match.TIMEX3@string}
+
+
+Rule: previousSeizure
+(
+    {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed"}
+    {Context3.minorType=="last"}
+    {Numeric}
+    {TIMEX3}
+):match
+-->
+:match.SeizureMentions = { SeizureType=:match.Lookup3.PREF, rule = previousSeizure3d, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, when = :match.TIMEX3@string}
+
+
+Rule: previousSeizure
+(
+    {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed"}
+    {Context3.minorType=="last"}
+    {TIMEX3}
+    {Numeric}
+):match
+-->
+:match.SeizureMentions = { SeizureType=:match.Lookup3.PREF, rule = previousSeizure3e, PREF = "Fit Frequency" ,CUI = "C0149775	
+", value = :match.Numeric.value, when = :match.TIMEX3@string}
+
+
+
+
+Rule: previousSeizure
+(
+    {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed"}
+    {Context3.minorType=="last"}
+    {Range}
+    {TIMEX3}
+):match
+-->
+:match.SeizureMentions = { SeizureType=:match.Lookup3.PREF, rule = previousSeizure3d, PREF = "Fit Frequency" ,CUI = "C0149775	
+", lower = :match.Range.N1, upper = :match.Range.N2, when = :match.TIMEX3@string}
+
+
+Rule: previousSeizure
+(
+    {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed"}
+    {Context3.minorType=="last"}
+    {TIMEX3}
+    {Range}
+):match
+-->
+:match.SeizureMentions = { SeizureType=:match.Lookup3.PREF, rule = previousSeizure3e, PREF = "Fit Frequency" ,CUI = "C0149775	
+", lower = :match.Range.N1, upper = :match.Range.N2, when = :match.TIMEX3@string}
+
+
+

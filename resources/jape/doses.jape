@@ -2,6 +2,10 @@ Phase: DrugStatus
 Input:Number Token
 Options: control=appelt
 
+/*
+ * SLaM JAPE file
+*/
+
 Rule: Tablets
 (
 	{Number}

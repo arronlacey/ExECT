@@ -1,0 +1,18 @@
+Phase: furtherDiagnosis
+Input:  MedCause listSent Lookup Sentence
+Options: control=all
+
+
+
+
+Rule: DiseaseCause
+	
+
+(
+	{MedCause}
+	{Lookup.STY == "Disease or Syndrome"}
+):item
+-->
+:item.Diagnosis = {rule = "EpCause", PREF = :item.Lookup.PREF  ,cause = "C1406659", Negation = :item.Lookup.Negation,
+Experiencer = :item.Lookup.Experiencer, Temporality = :item.Lookup.Temporality,Certainty = :item.Lookup.Certainty}
+

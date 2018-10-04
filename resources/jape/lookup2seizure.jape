@@ -1,0 +1,37 @@
+Phase: Lookup2Seizure
+Input: Lookup Seizures
+Options: control=appelt
+
+
+Rule: lookup2seizure
+(
+    {Lookup.label ==~ "seizure", Lookup.Negaton == Affirmed}
+):match
+-->
+:match.Lookup3 = { rule = lookup2seizure, minorType = "seizure", Negation = :match.Lookup.Negation, string = :match.Lookup.label,  PREF = :match.Lookup.PREF, CUI = :match.Lookup.inst}
+
+Rule: lookup2seizure
+(
+    {Lookup, Seizures}
+):match
+-->
+:match.Lookup3 = { rule = lookup2seizure2, minorType = "seizure", Negation = :match.Lookup.Negation, string = :match.Lookup.label,  PREF = :match.Lookup.PREF, CUI = :match.Lookup.inst}
+
+
+Rule: lookup2seizure
+(
+    {Lookup.PREF =~ "Fit frequency"}
+):match
+-->
+:match.Lookup3 = { rule = lookup2seizurefreq, minorType = "seizure", Negation = :match.Lookup.Negation, string = :match.Lookup.label, PREF = :match.Lookup.PREF}
+
+
+
+Rule: lookup2seizure
+(
+    {Lookup.PREF =~ "Seizure free"}
+):match
+-->
+:match.Lookup3 = { rule = lookup2seizurefree, minorType = "seizure", Negation = Negated, string = :match.Lookup.label, PREF = :match.Lookup.PREF,  CUI = :match.Lookup.inst}
+
+

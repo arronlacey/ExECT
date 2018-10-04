@@ -60,15 +60,17 @@ Rule: cleanHealthCareTerms
   inputAS.removeAll(umlsAnnots);
 }
 
+
+
 Rule: cleanDiagnosis
 
 (
-    ({Lookup.STY == "Sign or Symptom"} | {Lookup.STY == "Disease or Syndrome"} | {Lookup.STY == "Disease"}):umls
+   ({Lookup.STY == "Sign or Symptom"} | {Lookup.STY == "Disease or Syndrome"} | {Lookup.STY == "Disease"}):umls
 	({Lookup.STY == "Health Care Activity"} | {Lookup.STY =="Health Care Related Organization"})
 ):match
 -->
 :umls { 
-  inputAS.removeAll(umlsAnnots);
+ inputAS.removeAll(umlsAnnots);
 }
 
 

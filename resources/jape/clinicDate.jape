@@ -1,0 +1,27 @@
+Phase: Dates
+Input:TIMEX3 Lookup2 DateBio
+Options: control=appelt
+
+Rule: ClinicDate
+
+(
+	({Lookup2.majorType == "organization", Lookup2.minorType == "health_term"}|{Lookup2.majorType == "time", Lookup2.minorType == "date"})
+	({TIMEX3.foundByRule == "date_r1b-explicit"}|{TIMEX3.foundByRule == "date_r0h-explicit"})
+
+):match
+-->
+:match.ClinicDate = {rule = ClinicDate1, value = :match.TIMEX3.timexValue}
+
+
+
+
+Rule: ClinicDate2
+
+(
+	({Lookup2.majorType == "organization", Lookup2.minorType == "health_term"}|{Lookup2.majorType == "time", Lookup2.minorType == "date"})
+	{DateBio}
+)
+:match
+-->
+:match.ClinicDate = {rule = ClinicDate2,  value = :match.DateBio.value} 
+

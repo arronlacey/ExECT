@@ -1,0 +1,17 @@
+Phase: SeizureExclude3
+Input: SeizureMentions OtherPerson Sentence
+Options: control=all
+
+
+Rule: removeFamSeizure
+Priority:99
+(
+    {OtherPerson}
+    ({SeizureMentions}):umls
+):match
+-->
+:umls { 
+  inputAS.removeAll(umlsAnnots);
+}
+
+

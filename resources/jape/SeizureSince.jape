@@ -1,0 +1,139 @@
+Phase: SeizureSince
+Input: NumberRange Lookup3 Sentence PartialDate timeElapsed Calendar Interaction timePeriods
+Options: control=appelt
+
+/*
+ * Various rules for expressing last mention of a seizure
+ * i.e. since her last visit she has had 3 seizures
+ * since last October he hasn't had 4-5 episodes
+*/
+
+
+Rule: seziureSince
+Priority: 100
+(
+    {timeElapsed.time==since}
+    ({PartialDate} | {Calendar})
+    ({NumberRange})
+    ({Lookup3.string =~ "seizures" , Lookup3.Negation == "Affirmed"} | {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed" , Lookup3.Negation == "Affirmed"})
+):match
+-->
+:match.SeizureSince = { SeizureType=:match.Lookup3.PREF, rule = seizureSince1, PREF = "Fit Frequency" ,CUI = "C0149775	
+", number = :match.NumberRange.value, lower = :match.NumberRange.N1, upper = :match.NumberRange.N2,sinceTimeElapsed = since,
+timeRefDay = :match.PartialDate.day, timeRefMonth = :match.PartialDate.month, timeRefYear = :match.PartialDate.year, timeRefGeneric = :match.Calendar@string}
+
+
+Rule: seziureSince
+Priority: 100
+(
+    ({NumberRange})
+    ({Lookup3.string =~ "seizures" , Lookup3.Negation == "Affirmed"} | {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed" , Lookup3.Negation == "Affirmed"})
+    {timeElapsed.time==since}
+    ({PartialDate} | {Calendar})
+):match
+-->
+:match.SeizureSince = { SeizureType=:match.Lookup3.PREF, rule = seizureSince2, PREF = "Fit Frequency" ,CUI = "C0149775	
+", number = :match.NumberRange.value, lower = :match.NumberRange.N1, upper = :match.NumberRange.N2, sinceTimeElapsed = since,
+timeRefDay = :match.PartialDate.day, timeRefMonth = :match.PartialDate.month, timeRefYear = :match.PartialDate.year, timeRefGeneric = :match.Calendar@string}
+
+
+
+
+
+
+
+
+Rule: seziureSince
+Priority: 100
+(
+    {Interaction}
+    ({NumberRange})
+    ({Lookup3.string =~ "seizures" , Lookup3.Negation == "Affirmed"} | {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed" , Lookup3.Negation == "Affirmed"})
+):match
+-->
+:match.SeizureSince = { SeizureType=:match.Lookup3.PREF, rule = seizureSinceInteraction, PREF = "Fit Frequency" ,CUI = "C0149775	
+", number = :match.NumberRange.value, lower = :match.NumberRange.N1, upper = :match.NumberRange.N2, sinceTimeElapsed = since, timeRefGeneric = :match.Interaction@string}
+
+
+Rule: seziureSince
+Priority: 100
+(
+    ({NumberRange})
+    ({Lookup3.string =~ "seizures" , Lookup3.Negation == "Affirmed"} | {Lookup3.minorType == "seizure", Lookup3.Negation=="Affirmed" , Lookup3.Negation == "Affirmed"})
+    {Interaction}
+):match
+-->
+:match.SeizureSince = { SeizureType=:match.Lookup3.PREF, rule = seizureSinceInteraction2, PREF = "Fit Frequency" ,CUI = "C0149775	
+", number = :match.NumberRange.value, lower = :match.NumberRange.N1, upper = :match.NumberRange.N2, sinceTimeElapsed = since, timeRefGeneric = :match.Interaction@string}
+
+
+
+
+
+Rule: seizureSince0a
+Priority: 99
+(
+    ({timeElapsed.time==since}
+    {Lookup3.Negation == Affirmed}
+    ({NumberRange})?
+    ({timePeriods} | {PartialDate}))
+):match
+-->
+:match.SeizureSince = { SeizureType=:match.Lookup3.PREF, rule = seizureSince0a, PREF = "Fit Frequency" ,CUI = "C0149775", 
+sinceTimeElapsed = since, sinceDateDay = :match.PartialDate.day, sinceDateMonth = :match.PartialDate.month, sinceDateYear = :match.PartialDate.year,
+numPeriodValue = :match.NumberRange.value, numPeriodLower = :match.NumberRange.N1, numPeriodUpper = :match.NumberRange.N2,
+sinceperiod = :match.timePeriods.time-unit, sinceInteraction = :match.Interaction@string,  sinceDrug = :match.Lookup.PREF
+}
+
+
+Rule: seizureSince0b
+Priority: 99
+(
+    ({timeElapsed.time==since}
+    ({timePeriods} | {PartialDate})
+    {Lookup3.Negation == Affirmed})
+):match
+-->
+:match.SeizureSince = { SeizureType=:match.Lookup3.PREF, rule = seizureSince0b, PREF = "Fit Frequency" ,CUI = "C0149775", 
+sinceTimeElapsed = since, sinceDateDay = :match.PartialDate.day, sinceDateMonth = :match.PartialDate.month, sinceDateYear = :match.PartialDate.year,
+numPeriodValue = :match.NumberRange.value, numPeriodLower = :match.NumberRange.N1, numPeriodUpper = :match.NumberRange.N2,
+sinceperiod = :match.timePeriods.time-unit, sinceInteraction = :match.Interaction@string,  sinceDrug = :match.Lookup.PREF
+}
+
+
+
+
+Rule: seizureSince0b
+Priority: 99
+(
+    ({timeElapsed.time==last}
+    {Lookup3.Negation == Affirmed}
+    ({timeElapsed.time==during})*
+    {PartialDate})
+):match
+-->
+:match.SeizureSince = { SeizureType=:match.Lookup3.PREF, rule = seizureSince0c, PREF = "Fit Frequency" ,CUI = "C0149775", 
+sinceTimeElapsed = since, sinceDateDay = :match.PartialDate.day, sinceDateMonth = :match.PartialDate.month, sinceDateYear = :match.PartialDate.year,
+numPeriodValue = :match.NumberRange.value, numPeriodLower = :match.NumberRange.N1, numPeriodUpper = :match.NumberRange.N2,
+sinceperiod = :match.timePeriod.time-unit, sinceInteraction = :match.Interaction@string,  sinceDrug = :match.Lookup.PREF
+}
+
+
+
+
+
+Rule: seizureSince0b
+Priority: 99
+(
+    {timeElapsed.time==last}
+    {Lookup3.Negation == Affirmed}
+    {NumberRange}
+    {timePeriods}
+):match
+-->
+:match.SeizureSince = { SeizureType=:match.Lookup3.PREF, rule = seizureSince0d, PREF = "Fit Frequency" ,CUI = "C0149775", 
+sinceTimeElapsed = since, sinceDateDay = :match.PartialDate.day, sinceDateMonth = :match.PartialDate.month, sinceDateYear = :match.PartialDate.year,
+numPeriodValue = :match.NumberRange.value, numPeriodLower = :match.NumberRange.N1, numPeriodUpper = :match.NumberRange.N2,
+sinceperiod = :match.timePeriods.time-unit, sinceInteraction = :match.Interaction@string,  sinceDrug = :match.Lookup.PREF
+}
+

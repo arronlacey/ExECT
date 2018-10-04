@@ -2,7 +2,18 @@ Multiphase:Epilepsy
 
 Phases:
 
-seizure-frequency
 diagnosis
+seizure-frequency
 EpilepsyMentions
+SeizureSince
+SeizureFree
 Investigations
+InvestConj
+furtherDiagnosis
+DiagfromSeizure
+RemoveSeizure
+DiseaseCause
+Lookup2Annotation
+
+
+

@@ -1,0 +1,26 @@
+Phase: LocationAndFinding
+Input: Lookup Sentence startList Split listPoint
+Options: control=all
+
+
+Rule: LocationAndFinding
+
+(
+	({Lookup.TUI == "T07"} | {Lookup.TUI =~ "T02"}):loc
+	({Lookup.STY == "Finding"} | {Lookup.STY == "Disease or Syndrome"} | {Lookup.STY == "Congenital Abnormaility"}  | {Lookup.STY == "Sign or Symptom"}):find
+):match
+-->
+:match.CompoundLookup = { rule = locationAndFinding, locPREF = :loc.Lookup.PREF, locCUI = :loc.Lookup.inst	, findPREF = :find.Lookup.PREF, findCUI = :find.Lookup.inst, Negation = :loc.Lookup.Negation}
+
+
+
+
+
+Rule: FindingAndLocation
+
+(
+    ({Lookup.STY == "Finding"} | {Lookup.STY == "Disease or Syndrome"} | {Lookup.STY == "Congenital Abnormaility"}  | {Lookup.STY == "Sign or Symptom"}):find
+	({Lookup.TUI == "T07"} | {Lookup.TUI =~ "T02"}):loc
+):match
+-->
+:match.CompoundLookup = { rule = locationAndFinding, locPREF = :loc.Lookup.PREF, locCUI = :loc.Lookup.inst	, findPREF = :find.Lookup.PREF, findCUI = :find.Lookup.inst, Negation = :loc.Lookup.Negation}

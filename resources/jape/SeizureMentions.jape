@@ -1,0 +1,206 @@
+Phase: SeizureStatus
+Input: Numeric Lookup3 Range Sentence TIMEX3 startList Date Temporal listPoint Split Context Person
+Options: control=appelt
+
+/*
+ * rules for someone being seizure free
+*/
+
+Rule: seizureFreeExplicit
+Priority:99
+(
+    {Lookup3.PREF == "Seizure free"}
+    (({Numeric, !listPoint}))+
+    ({TIMEX3})+
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreeExplicit, PREF = "Seizure free", CUI = "C1299590", value = :match.Numeric.value, period = :match.TIMEX3@string}
+
+Rule: seizureFreeExplicit2
+Priority: 99
+(
+    {Lookup3.PREF == "Seizure free"}
+    {!Numeric}
+    ({TIMEX3})+
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreeExplicit2, PREF = "Seizure free", CUI = "C1299590	", value = "1", period = :match.TIMEX3@string}
+
+
+Rule: seizureFreeExplicit4
+Priority:99
+(
+    
+    {TIMEX3}
+    {Lookup3.PREF == "Seizure free"}
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreeExplicit4444, PREF = "Seizure free", CUI = "C1299590	", period = :match.TIMEX3@string}
+
+
+Rule: seziureFreeExplicit
+Priority:99
+(
+    {Lookup3.PREF == "Seizure free"}
+    {TIMEX3}
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreeExplicit6, PREF = "Current Seizure" ,CUI = "C0036572", period = :match.TIMEX3@string}
+
+
+Rule: seizureFreeExplicit7
+Priority:99
+(
+    {Lookup3.PREF == "Seizure free"}
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreeExplicit7, PREF = "Seizure free", CUI = "C1299590	", period = :match.TIMEX3@string}
+
+
+
+
+
+
+
+
+Rule: seizureFreeImplicit
+Priority:95
+(
+    {Lookup3.minorType =~ "seizure" , Lookup3.Negation == "Negated"}
+    (({Numeric, !listPoint}))+
+    ({TIMEX3})+
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreeImplicit, PREF = "Seizure free", CUI = "C1299590", value = :match.Numeric.value, period = :match.TIMEX3@string}
+
+Rule: seizureFreeImplicit2
+Priority:95
+(
+    {Lookup3.minorType =~ "seizure" , Lookup3.Negation == "Negated"}
+    ({TIMEX3})+
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreeImplicit2, PREF = "Seizure free", CUI = "C1299590", value = "1", period = :match.TIMEX3@string}
+
+
+
+Rule: seizureFreeImplicit
+Priority:95
+(
+    {Lookup3.minorType =~ "seizure" , Lookup3.Negation == "Negated"}
+    (({Numeric, !listPoint}))+
+    ({TIMEX3})+
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreeImplicit3, PREF = "Seizure free", CUI = "C1299590", value = :match.Numeric.value, period = :match.TIMEX3@string}
+
+
+Rule: seizureFreeImplicit
+Priority:99
+(   
+    {Lookup3.minorType =~ "seizure" , Lookup3.Negation == "Negated"}
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreeImplicit4, PREF = "Seizure free", CUI = "C1299590"}
+
+Rule: seizureFreeImplicit
+Priority:95
+(     
+    {TIMEX3}
+    {Lookup3.minorType =~ "seizure" , Lookup3.Negation == "Negated"}
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreeImplicit6, PREF = "Seizure free", CUI = "C1299590", period = :match.TIMEX3@string}
+
+
+
+
+
+
+
+
+
+
+
+Rule: seziureFreeSince
+Priority:99
+(
+    ({Lookup3.string =~ "seizures" , Lookup3.Negation == "Negated"} | {Lookup3.minorType == "seizure" , Lookup3.Negation == "Negated"})
+    {TIMEX3}
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreenumSince, PREF = "Seizure Free" ,CUI = "C1299590	
+", value = :match.Numeric.value, since = :match.TIMEX3@string}
+
+
+
+
+Rule: seziureFreeSince
+Priority:99
+(
+    {TIMEX3}
+    ({Lookup3.string =~ "seizures" , Lookup3.Negation == "Negated"} | {Lookup3.minorType == "seizure" , Lookup3.Negation == "Negated"})
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreenumSince, PREF = "Seizure Free" ,CUI = "C1299590	
+", value = :match.Numeric.value, since = :match.TIMEX3@string}
+
+
+
+
+
+
+
+
+Rule: seziureFreeSince
+Priority:99
+(
+    ({Lookup3.string =~ "seizures" , Lookup3.Negation == "Negated"} | {Lookup3.minorType == "seizure" , Lookup3.Negation == "Negated"})
+    {Date}
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreenumSince, PREF = "Seizure Free" ,CUI = "C1299590	
+", value = :match.Numeric.value, since = :match.Date@string}
+
+
+
+
+Rule: seziureFreeSince
+Priority:99
+(
+    {Date}
+    ({Lookup3.string =~ "seizures" , Lookup3.Negation == "Negated"} | {Lookup3.minorType == "seizure" , Lookup3.Negation == "Negated"})
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreenumSince, PREF = "Seizure Free" ,CUI = "C1299590	
+", value = :match.Numeric.value, since = :match.Date@string}
+
+
+
+
+Rule: seziureFreeSince
+Priority:99
+(
+    ({TIMEX3.timexValue == "PRESENT_REF" } | {Temporal.minorType == "present"})
+    ({Lookup3.string =~ "seizures" , Lookup3.Negation == "Negated"} | {Lookup3.minorType == "seizure" , Lookup3.Negation == "Negated"})
+):match
+-->
+:match.SeizureMentions = { Status = seizureFree, SeziureType=:match.Lookup3.PREF, rule = seizureFreecurrent, PREF = "Seizure Free" ,CUI = "C1299590"}
+
+
+
+
+
+Rule: seziureCurrentSince
+Priority:99
+(
+    ({TIMEX3.timexValue == "PRESENT_REF"} | {Temporal.minorType == "present"})+
+    ({Lookup3.string =~ "seizures" , Lookup3.Negation == "Affirmed", Lookup3.PREF != "Seizure free"} | {Lookup3.minorType == "seizure" , Lookup3.Negation == "Affirmed", Lookup3.PREF != "Seizure free"})
+):match
+-->
+:match.SeizureMentions = {SeziureType=:match.Lookup3.PREF, rule = seizurecurrent, PREF = "Current Seizure" ,CUI = "C0036572"}
+
+
+
+
+

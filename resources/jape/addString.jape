@@ -1,0 +1,22 @@
+Imports: {import static gate.Utils.*; }
+
+Phase: addStrings
+Input: Lookup2 Measurement Context Context3 Lookup PartialDate timePeriods Trigger Prescription Conj NegConj Lookup3 Investigation InvestigationFinding NumberRange Temporal
+Options: control=all
+
+/*
+ * assigns a the covered string
+*/
+
+
+Rule: prob1
+(
+	({Lookup2}|{Measurement}|{Context}|{Context3}|{Lookup}|{PartialDate}|{timePeriods}|{Trigger}|{Prescription}|{Conj}|{NegConj}|{Lookup3}|{Investigation}|{InvestigationFinding}|{NumberRange}|{Temporal}):lookup
+):match
+-->
+:lookup {
+  Annotation lookupAnn = lookupAnnots.iterator().next();
+  String content = gate.Utils.stringFor(doc, lookupAnnots);
+  lookupAnn.getFeatures().put("string", content);
+}
+
