@@ -1,2 +1,3 @@
 epilepsy_codes.lst:Filter:epilepsy::Mentions
 Investigations_cui.lst:Filter:investigations::Investigations
+seizureCUIs.lst:Filter:seizures::Seizures

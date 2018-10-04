@@ -1,4 +1,3 @@
-a:value=1
 single:value=1
 one:value=1
 two:value=2
@@ -10,3 +9,8 @@ seven:value=7
 eight:value=8
 nine:value=9
 ten:value=10
+fifteen:value=15
+twenty:value=20
+a couple:value=2
+a few:value=2
+once:value =1

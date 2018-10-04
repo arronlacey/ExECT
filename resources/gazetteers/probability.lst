@@ -1,5 +1,44 @@
-likely
-possible
-probable
-possibility of
-Possible
+likely:Level=4
+possible:Level=3
+probable:Level=4
+possibility of:Level=3
+?:Level=3
+uncertain:Level=3
+suspected:Level=4
+unlikely:Level=2
+doubtful:Level=2
+certain:Level=5
+suggestive:Level=4
+doubt:Level=2
+ruled out:Level=1
+unsure:Level=2
+unclear:Level=2
+treated as:Level=4
+treating this as:Level=4
+definite:Level=5
+not convinced:Level=2
+remote:Level=2
+improbable:Level=2
+probably:Level=4
+might:Level=3
+not likely:Level=2
+suspicion:Level=4
+I think:Level=4
+potential:Level=3
+potentially:Level=3
+??:Level=2
+further clarification:Level=3
+further investigation:Level=3
+to be confirmed:Level=3
+impression is:Level=4
+sounds like:Level=4
+remote possibility:Level=2
+to be sure:Level=3
+to see if:Level=3
+could be:Level=3
+sound like:Level=4
+suspect:Level=4
+to see whether:Level=3
+unusual:Level=2
+are dealing with:Level=5
+suspicious:Level=4

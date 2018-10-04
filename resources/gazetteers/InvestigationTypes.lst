@@ -1,0 +1,25 @@
+EEG
+MRI
+CT
+abnormal EEG:Outcome=abnormal
+normal EEG:Outcome=normal
+EEG normal:Outcome=normal
+EEG abnormal:Outcome=abnormal
+abnormal MRI:Outcome=abnormal
+normal MRI:Outcome=normal
+MRI normal:Outcome=normal
+MRI abnormal:Outcome=abnormal
+abnormal CT:Outcome=abnormal
+normal CT:Outcome=normal
+CT normal:Outcome=normal
+CT abnormal:Outcome=abnormal
+EEGs~
+MRIs~
+CTs~
+EEG's~
+MRI's~
+CT's~
+MRI scan
+sleep EEG
+videotelemetry
+video-telemetry
